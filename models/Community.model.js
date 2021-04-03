@@ -15,16 +15,16 @@ const communitySchema = new Schema({
     required: true,
   },
   members: {
-    type: [String],
+    type: [String], //CONNECT USERS
   },
   numberOfMembers: {
     type: Number,
   },
   discussionTopics: {
-    type: [String],
+    type: [String], //CONNECT DISCUSSION TOPICS
   },
   comments: {
-    type: [String],
+    type: [String], //CONNECT COMMENTS
   },
 });
 
