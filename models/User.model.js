@@ -23,6 +23,13 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  bio: {
+    type: String,
+    required: true,
+  },
+  tags: {
+    type: [String],
+  },
 });
 
 const User = model("User", userSchema);

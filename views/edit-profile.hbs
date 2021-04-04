@@ -1,0 +1,16 @@
+<h4>Edit Profile</h4>
+
+{{#with user}}
+
+<form method="POST" action="/profile/edit">
+  <label>Name</label>
+  <input name="name" value="{{name}}">
+  <br>
+  <label>Bio</label>
+  <input name="bio" value="{{bio}}">
+  <br>
+  <label>Interests</label>
+  <input name="interests" value="{{interests}}">
+</form>
+
+{{/with}}
