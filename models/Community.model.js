@@ -17,6 +17,9 @@ const communitySchema = new Schema({
   members: {
     type: [String], //CONNECT USERS
   },
+  slug: {
+    type: String,
+  },
   numberOfMembers: {
     type: Number,
   },
