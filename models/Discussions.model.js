@@ -5,6 +5,7 @@ const discussionSchema = new Schema({
   title: {
     type: String,
     unique: true,
+    required: true,
   },
   createdBy: {
     type: String, //CONNECT A USER
@@ -14,6 +15,7 @@ const discussionSchema = new Schema({
   },
   numberOfComments: {
     type: Number,
+    default: 0,
   },
   image: {
     type: String,
