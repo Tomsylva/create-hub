@@ -30,7 +30,7 @@ const CommunityDb = [
     numberOfMembers: 0,
     discussionTopic: [],
     comments: [],
-    keyword: "digitalart",
+    keyword: "digital-art",
   },
   {
     name: "Writing & Poetry",
