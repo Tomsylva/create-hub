@@ -6,3 +6,16 @@
     {{#each singleCommunity.disuccionTopic}}
     {{/each}}
 </div>
+
+<div>
+    <ul>
+        {{#if apidata}}
+        {{#each apidata}}
+        <li>
+            <p><a href="{{this.url}}">{{this.title}}</a>
+            <p>Source: {{this.source}}</p>
+        </li>
+        {{/each}}
+        {{/if}}
+    </ul>
+</div>

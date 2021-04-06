@@ -5,6 +5,8 @@ const isLoggedIn = require("../middlewares/isLoggedIn");
 const apiURL = `http://api.mediastack.com/v1/news?access_key=${process.env.NEWS_API_KEY}`;
 const axios = require("axios");
 
+let apidata;
+
 router.get("/", (req, res) => {
   res.render("community/community-home");
 });
@@ -68,18 +70,20 @@ router.get("/:dynamicCommunity", (req, res) => {
       if (!singleCommunity) {
         return res.redirect("/");
       }
-      const keyword = singleCommunity.keyword;
+      let keyword = singleCommunity.keyword;
       getNewsStories(keyword);
       res.render("community/single-community", {
         singleCommunity: singleCommunity,
+        apidata: apidata,
       });
     }
   );
 });
 
 function getNewsStories(keyword) {
-  axios.get(`${apiURL}&keywords=${keyword}`).then((response) => {
-    console.log(response.data);
+  axios.get(`${apiURL}&keywords=${keyword}&languages=en`).then((response) => {
+    // console.log(response.data.data[0]);
+    apidata = response.data.data;
   });
 }
 
