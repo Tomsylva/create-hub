@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
+const isLoggedIn = require("../middlewares/isLoggedIn");
 
 router.get("/", (req, res) => {
   res.render("community/community-home");
@@ -23,7 +24,7 @@ router.get("/:dynamicCommunity/new-discussion", (req, res) => {
 
 // CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
 // Add logged in middleware when available !!!!!
-router.post("/:dynamicCommunity/new-discussion", (req, res) => {
+router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   const dynamicCommunity = req.params.dynamicCommunity;
   const { title, firstPost } = req.body;
   if (!title || !firstPost) {
