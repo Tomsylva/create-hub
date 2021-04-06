@@ -45,9 +45,11 @@ router.post("/:dynamicCommunity/new-discussion", (req, res) => {
     })
       .then((createdDiscussion) => {
         // CURRENTLY REDIRECTS TO COMMUNITY HOME
+        console.log("Amazing!");
         res.redirect(`/${dynamicCommunity}`);
       })
       .catch((err) => {
+        console.log("Sad times :(", err);
         res.render("community/new-discussion", {
           errorMessage: "Something went wrong",
         });
