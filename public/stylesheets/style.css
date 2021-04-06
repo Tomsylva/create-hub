@@ -33,6 +33,28 @@ h1 {
   float: right;
 }
 
+#community-body {
+  display: flex;
+  flex-direction: row;
+}
+
+#news-panel {
+  width: 40vw;
+}
+
+#discussion-panel {
+  width: 60vw;
+}
+
+#news-panel ul {
+  list-style: none;
+}
+
+#news-panel ul li {
+  border: 1px solid black;
+  padding: 10px;
+}
+
 footer {
   position: fixed;
   bottom: 0;
