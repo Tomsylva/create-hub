@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 
 // LINK FROM "START A CONVERSATION" BUTTON
 // Finds correct community and passes it with req-params and slug
-router.get("/:dynamicCommunity/new-discussion", (req, res) => {
+router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   Community.findOne({ slug: req.params.dynamicCommunity }).then(
     (singleCommunity) => {
       if (!singleCommunity) {
