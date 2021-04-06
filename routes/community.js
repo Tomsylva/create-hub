@@ -5,6 +5,8 @@ router.get("/", (req, res) => {
   res.render("community/community-home");
 });
 
+// LOADS EACH COMMUNITY HOME DYNAMICALLY
+// Each community can be viewed by anybody not signed in
 router.get("/:dynamicCommunity", (req, res) => {
   Community.findOne({ slug: req.params.dynamicCommunity }).then(
     (singleCommunity) => {
