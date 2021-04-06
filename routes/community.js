@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
 const isLoggedIn = require("../middlewares/isLoggedIn");
+const apiURL = `http://api.mediastack.com/v1/?${process.env.NEWS_API_KEY}`;
 
 router.get("/", (req, res) => {
   res.render("community/community-home");
@@ -72,5 +73,9 @@ router.get("/:dynamicCommunity", (req, res) => {
     }
   );
 });
+
+function getNewsStories(keyword) {
+  axios.get(`${apiURL}&keywords=${keyword}`);
+}
 
 module.exports = router;
