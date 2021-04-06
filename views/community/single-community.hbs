@@ -1,0 +1,8 @@
+<h1>Welcome to our {{singleCommunity.name}} Community</h1>
+<p>{{singleCommunity.about}}</p>
+
+<div id="discussion-panel">
+    <a href="/community/{{singleCommunity.slug}}/new-discussion">Start a conversation</a>
+    {{#each singleCommunity.disuccionTopic}}
+    {{/each}}
+</div>

@@ -5,19 +5,24 @@ const discussionSchema = new Schema({
   title: {
     type: String,
     unique: true,
+    required: true,
   },
   createdBy: {
     type: String, //CONNECT A USER
+  },
+  firstPost: {
+    type: String,
+    required: true,
   },
   comments: {
     type: [String], //CONNECT COMMENTS
   },
   numberOfComments: {
     type: Number,
+    default: 0,
   },
   image: {
     type: String,
-    required: true,
   },
 });
 
