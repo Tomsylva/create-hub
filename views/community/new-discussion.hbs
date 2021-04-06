@@ -1,0 +1,15 @@
+<h1>Start a new Discussion in the {{singleCommunity.name}} Community</h1>
+
+<form action="/community/{{singleCommunity.slug}}/new-discussion" method="POST">
+    <input type="text" name="title" id="title" placeholder="Topic">
+    <br>
+    <input type="text" name="firstPost" id="firstPost" placeholder="About">
+    <br>
+    <button type="submit">Hit me!</button>
+</form>
+
+{{#if errorMessage}}
+
+<h3 id="error-message">{{errorMessage}}</h3>
+
+{{/if}}

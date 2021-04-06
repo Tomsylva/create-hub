@@ -19,15 +19,29 @@ router.get("/signup", shouldNotBeLoggedIn, (req, res) => {
 });
 
 router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
-  const { username, password } = req.body;
+  const { name, email, username, password } = req.body;
 
+<<<<<<< HEAD
+  if (!username || !email || !name || !password) {
+    console.log("HELLO?");
+    return res.status(400).render("auth/signup", {
+      errorMessage: "Please provide the info requested.",
+    });
+  }
+
+  if (password.length < 8) {
+    return res.status(400).render("auth/signup", {
+=======
   if (!username) {
-    return res.status(400).render("signup", { errorMessage: "Please provide your username." });
+    return res
+      .status(400)
+      .render("signup", { errorMessage: "Please provide your username." });
   }
 
   if (password.length < 8) {
     return res.status(400).render("signup", {
-      errorMessage: "Your password needs to be at least 8 characters long."
+>>>>>>> tom-changes
+      errorMessage: "Your password needs to be at least 8 characters long.",
     });
   }
 
@@ -44,10 +58,16 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
   */
 
   // Search the database for a user with the username submitted in the form
-  User.findOne({ username }).then((found) => {
+  User.findOne({ $or: [{ username }, { email }] }).then((found) => {
     // If the user is found, send the message username is taken
     if (found) {
-      return res.status(400).render("signup", { errorMessage: "Username already taken." });
+      return res
+        .status(400)
+<<<<<<< HEAD
+        .render("auth/signup", { errorMessage: "Username already taken." });
+=======
+        .render("signup", { errorMessage: "Username already taken." });
+>>>>>>> tom-changes
     }
 
     // if user is not found, create a new user - start with hashing the password
@@ -58,7 +78,12 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
         // Create a user and save it in the database
         return User.create({
           username,
-          password: hashedPassword
+<<<<<<< HEAD
+          email,
+          name,
+=======
+>>>>>>> tom-changes
+          password: hashedPassword,
         });
       })
       .then((user) => {
@@ -68,14 +93,34 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
       })
       .catch((error) => {
         if (error instanceof mongoose.Error.ValidationError) {
-          return res.status(400).render("signup", { errorMessage: error.message });
+<<<<<<< HEAD
+          console.log(error);
+
+          return res
+            .status(400)
+            .render("auth/signup", { errorMessage: error.message });
+        }
+        if (error.code === 11000) {
+          return res.status(400).render("auth/signup", {
+=======
+          return res
+            .status(400)
+            .render("signup", { errorMessage: error.message });
         }
         if (error.code === 11000) {
           return res.status(400).render("signup", {
-            errorMessage: "Username need to be unique. The username you chose is already in use."
+>>>>>>> tom-changes
+            errorMessage:
+              "Username need to be unique. The username you chose is already in use.",
           });
         }
-        return res.status(500).render("signup", { errorMessage: error.message });
+        return res
+          .status(500)
+<<<<<<< HEAD
+          .render("auth/signup", { errorMessage: error.message });
+=======
+          .render("signup", { errorMessage: error.message });
+>>>>>>> tom-changes
       });
   });
 });
@@ -88,14 +133,24 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
   const { username, password } = req.body;
 
   if (!username) {
-    return res.status(400).render("login", { errorMessage: "Please provide your username." });
+    return res
+      .status(400)
+<<<<<<< HEAD
+      .render("auth/login", { errorMessage: "Please provide your username." });
+=======
+      .render("login", { errorMessage: "Please provide your username." });
+>>>>>>> tom-changes
   }
 
   // Here we use the same logic as above
   // - either length based parameters or we check the strength of a password
   if (password.length < 8) {
+<<<<<<< HEAD
+    return res.status(400).render("auth/login", {
+=======
     return res.status(400).render("login", {
-      errorMessage: "Your password needs to be at least 8 characters long."
+>>>>>>> tom-changes
+      errorMessage: "Your password needs to be at least 8 characters long.",
     });
   }
 
@@ -104,13 +159,25 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
     .then((user) => {
       // If the user isn't found, send the message that user provided wrong credentials
       if (!user) {
-        return res.status(400).render("login", { errorMessage: "Wrong credentials." });
+        return res
+          .status(400)
+<<<<<<< HEAD
+          .render("auth/login", { errorMessage: "Wrong credentials." });
+=======
+          .render("login", { errorMessage: "Wrong credentials." });
+>>>>>>> tom-changes
       }
 
       // If user is found based on the username, check if the in putted password matches the one saved in the database
       bcrypt.compare(password, user.password).then((isSamePassword) => {
         if (!isSamePassword) {
-          return res.status(400).render("login", { errorMessage: "Wrong credentials." });
+          return res
+            .status(400)
+<<<<<<< HEAD
+            .render("auth/login", { errorMessage: "Wrong credentials." });
+=======
+            .render("login", { errorMessage: "Wrong credentials." });
+>>>>>>> tom-changes
         }
         req.session.user = user;
         // req.session.user = user._id; // ! better and safer but in this case we saving the entire user object
@@ -129,7 +196,9 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      return res.status(500).render("auth/logout", { errorMessage: err.message });
+      return res
+        .status(500)
+        .render("auth/logout", { errorMessage: err.message });
     }
     res.redirect("/");
   });

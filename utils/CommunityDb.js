@@ -8,6 +8,7 @@ const CommunityDb = [
     numberOfMembers: 0,
     discussionTopic: [],
     comments: [],
+    keyword: "music",
   },
   {
     name: "Fine Art",
@@ -18,6 +19,7 @@ const CommunityDb = [
     numberOfMembers: 0,
     discussionTopic: [],
     comments: [],
+    keyword: "art",
   },
   {
     name: "Digital Art",
@@ -28,6 +30,7 @@ const CommunityDb = [
     numberOfMembers: 0,
     discussionTopic: [],
     comments: [],
+    keyword: "digital-art",
   },
   {
     name: "Writing & Poetry",
@@ -38,6 +41,7 @@ const CommunityDb = [
     numberOfMembers: 0,
     discussionTopic: [],
     comments: [],
+    keyword: "writing",
   },
   {
     name: "Photography",
@@ -48,6 +52,7 @@ const CommunityDb = [
     numberOfMembers: 0,
     discussionTopic: [],
     comments: [],
+    keyword: "photography",
   },
 ];
 
