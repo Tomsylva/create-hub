@@ -5,6 +5,10 @@ router.get("/", (req, res) => {
   res.render("community/community-home");
 });
 
+router.get("/new-discussion", (req, res) => {
+  res.render("community/new-discussion");
+});
+
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
 // Each community can be viewed by anybody not signed in
 router.get("/:dynamicCommunity", (req, res) => {

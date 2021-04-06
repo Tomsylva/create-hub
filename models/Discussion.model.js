@@ -10,6 +10,10 @@ const discussionSchema = new Schema({
   createdBy: {
     type: String, //CONNECT A USER
   },
+  firstPost: {
+    type: String,
+    required: true,
+  },
   comments: {
     type: [String], //CONNECT COMMENTS
   },
