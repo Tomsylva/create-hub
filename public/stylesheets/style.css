@@ -29,6 +29,10 @@ h1 {
   padding: 0 20px 0 0;
 }
 
+#signup-button {
+  float: right;
+}
+
 footer {
   position: absolute;
   bottom: 0;
