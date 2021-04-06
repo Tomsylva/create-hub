@@ -29,6 +29,9 @@ const communitySchema = new Schema({
   comments: {
     type: [String], //CONNECT COMMENTS
   },
+  keyword: {
+    type: String,
+  },
 });
 
 const Community = model("Community", communitySchema);

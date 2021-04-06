@@ -2,7 +2,8 @@ const router = require("express").Router();
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
 const isLoggedIn = require("../middlewares/isLoggedIn");
-const apiURL = `http://api.mediastack.com/v1/?${process.env.NEWS_API_KEY}`;
+const apiURL = `http://api.mediastack.com/v1/news?access_key=${process.env.NEWS_API_KEY}`;
+const axios = require("axios");
 
 router.get("/", (req, res) => {
   res.render("community/community-home");
@@ -67,6 +68,8 @@ router.get("/:dynamicCommunity", (req, res) => {
       if (!singleCommunity) {
         return res.redirect("/");
       }
+      const keyword = singleCommunity.keyword;
+      getNewsStories(keyword);
       res.render("community/single-community", {
         singleCommunity: singleCommunity,
       });
@@ -75,7 +78,9 @@ router.get("/:dynamicCommunity", (req, res) => {
 });
 
 function getNewsStories(keyword) {
-  axios.get(`${apiURL}&keywords=${keyword}`);
+  axios.get(`${apiURL}&keywords=${keyword}`).then((response) => {
+    console.log(response.data);
+  });
 }
 
 module.exports = router;
