@@ -2,3 +2,18 @@
 
 <p>I am thinking that my quick-ass logo is a bit lame, but it does bring me home when I click on it. A bit like ET...
 </p>
+
+{{#if user}}
+<h4>Welcome {{user.name}}</h4>
+<br>
+<a href="/profile">Go to profile</a>
+<br>
+<a href="/auth/logout">Logout</a>
+
+{{else}}
+<nav>
+  <ul>
+    <li><a href="/auth/signup" id="signup-button">Sign Up</a></li>
+    <li><a href="/auth/login" id="login-button">Login</a></li>
+</nav>
+{{/if}}

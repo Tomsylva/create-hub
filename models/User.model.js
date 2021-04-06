@@ -25,7 +25,6 @@ const userSchema = new Schema({
   },
   bio: {
     type: String,
-    required: true,
   },
   tags: {
     type: [String],

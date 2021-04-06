@@ -4,5 +4,9 @@
 <h4>Welcome {{name}} to your profile</h4>
 
 <a href="/profile/edit">Edit your profile</a>
-
+{{#if bio}}
+<p>{{bio}}</p>
+<p>{{interests}}</p>
+<ul>{{community}}</ul>
+{{/if}}
 {{/with}}
