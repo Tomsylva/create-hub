@@ -1,12 +1,58 @@
 const router = require("express").Router();
 const Community = require("../models/Community.model");
+const Discussion = require("../models/Discussion.model");
 
 router.get("/", (req, res) => {
   res.render("community/community-home");
 });
 
-router.get("/new-discussion", (req, res) => {
-  res.render("community/new-discussion");
+// LINK FROM "START A CONVERSATION" BUTTON
+// Finds correct community and passes it with req-params and slug
+router.get("/:dynamicCommunity/new-discussion", (req, res) => {
+  Community.findOne({ slug: req.params.dynamicCommunity }).then(
+    (singleCommunity) => {
+      if (!singleCommunity) {
+        return res.redirect("/");
+      }
+      res.render("community/new-discussion", {
+        singleCommunity: singleCommunity,
+      });
+    }
+  );
+});
+
+// CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
+// Add logged in middleware when available !!!!!
+router.post("/:dynamicCommunity/new-discussion", (req, res) => {
+  const dynamicCommunity = req.params.dynamicCommunity;
+  const { title, firstPost } = req.body;
+  if (!title || !firstPost) {
+    res.render("community/new-discussion", {
+      errorMessage: "Please fill in both fields",
+    });
+    return;
+  }
+  Discussion.findOne({ title }).then((found) => {
+    if (found) {
+      return res.render("community/new-discussion", {
+        errorMessage: "Discussion already exists",
+      });
+    }
+    Discussion.create({
+      title,
+      firstPost,
+      createdBy: req.session.user._id,
+    })
+      .then((createdDiscussion) => {
+        // CURRENTLY REDIRECTS TO COMMUNITY HOME
+        res.redirect(`/${dynamicCommunity}`);
+      })
+      .catch((err) => {
+        res.render("community/new-discussion", {
+          errorMessage: "Something went wrong",
+        });
+      });
+  });
 });
 
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
