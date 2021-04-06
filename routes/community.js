@@ -1,6 +1,11 @@
 const router = require("express").Router();
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
+const isLoggedIn = require("../middlewares/isLoggedIn");
+const apiURL = `http://api.mediastack.com/v1/news?access_key=${process.env.NEWS_API_KEY}`;
+const axios = require("axios");
+
+//let apidata;
 
 router.get("/", (req, res) => {
   res.render("community/community-home");
@@ -8,7 +13,7 @@ router.get("/", (req, res) => {
 
 // LINK FROM "START A CONVERSATION" BUTTON
 // Finds correct community and passes it with req-params and slug
-router.get("/:dynamicCommunity/new-discussion", (req, res) => {
+router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   Community.findOne({ slug: req.params.dynamicCommunity }).then(
     (singleCommunity) => {
       if (!singleCommunity) {
@@ -23,7 +28,7 @@ router.get("/:dynamicCommunity/new-discussion", (req, res) => {
 
 // CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
 // Add logged in middleware when available !!!!!
-router.post("/:dynamicCommunity/new-discussion", (req, res) => {
+router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   const dynamicCommunity = req.params.dynamicCommunity;
   const { title, firstPost } = req.body;
   if (!title || !firstPost) {
@@ -62,14 +67,28 @@ router.post("/:dynamicCommunity/new-discussion", (req, res) => {
 router.get("/:dynamicCommunity", (req, res) => {
   Community.findOne({ slug: req.params.dynamicCommunity }).then(
     (singleCommunity) => {
+      console.log("singleCommuniotz", singleCommunity);
       if (!singleCommunity) {
         return res.redirect("/");
       }
-      res.render("community/single-community", {
-        singleCommunity: singleCommunity,
+      let keyword = singleCommunity.keyword;
+      getNewsStories(keyword).then((apidata) => {
+        res.render("community/single-community", {
+          singleCommunity: singleCommunity,
+          apidata: apidata,
+        });
       });
     }
   );
 });
+
+function getNewsStories(keyword) {
+  return axios
+    .get(`${apiURL}&keywords=${keyword}&languages=en`)
+    .then((response) => {
+      // console.log(response.data.data[0]);
+      return response.data.data;
+    });
+}
 
 module.exports = router;
