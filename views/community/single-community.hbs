@@ -1,8 +1,26 @@
 <h1>Welcome to our {{singleCommunity.name}} Community</h1>
 <p>{{singleCommunity.about}}</p>
 
-<div id="discussion-panel">
-    <a href="/community/{{singleCommunity.slug}}/new-discussion">Start a conversation</a>
-    {{#each singleCommunity.disuccionTopic}}
-    {{/each}}
+<div id="community-body">
+    <div id="discussion-panel">
+        <h2>{{singleCommunity.name}} Discussions</h2>
+        <a href="/community/{{singleCommunity.slug}}/new-discussion">Start a conversation</a>
+        {{#each singleCommunity.disuccionTopic}}
+        {{/each}}
+    </div>
+
+    <div id="news-panel">
+        <h2>Current {{singleCommunity.name}} News</h2>
+        <ul>
+            {{#if apidata}}
+            {{#each apidata}}
+            <li class="news-item">
+                <p><a href="{{this.url}}">{{this.title}}</a>
+                <p>Source: {{this.source}}</p>
+                {{!-- <p>{{this.description}}</p> --}}
+            </li>
+            {{/each}}
+            {{/if}}
+        </ul>
+    </div>
 </div>
