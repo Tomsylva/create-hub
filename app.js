@@ -1,3 +1,6 @@
+// const passport = require("passport");
+// require("./config/passport");
+
 // ℹ️ Gets access to environment variables/settings
 // https://www.npmjs.com/package/dotenv
 require("dotenv/config");
@@ -23,6 +26,26 @@ const capitalized = (string) =>
   string[0].toUpperCase() + string.slice(1).toLowerCase();
 
 app.locals.title = `${capitalized(projectName)} created with Ironlauncher`;
+
+//passport middleware
+
+// let userProfile;
+
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+// app.set("view engine", "ejs");
+
+// app.get("/success", (req, res) => res.send(userProfile));
+// app.get("/error", (req, res) => res.send("error logging in"));
+
+// passport.serializeUser(function (user, cb) {
+//   cb(null, user);
+// });
+
+// passport.deserializeUser(function (obj, cb) {
+//   cb(null, obj);
+// });
 
 // 👇 Start handling routes here
 const index = require("./routes/index");

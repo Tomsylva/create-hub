@@ -2,7 +2,14 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
+.login-container {
+  width: 400px;
+  margin-top: 50px;
+  text-align: center;
+}
+p {
+  margin: 10px 0 !important;
+}
 a {
   color: #00b7ff;
 }

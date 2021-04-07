@@ -6,6 +6,10 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <title>{{title}}</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous" />
    <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 
@@ -15,24 +19,30 @@
       <ul id="navbar-links">
          <li><a href="/"></img src="/images/CRE8-logo.png" alt="HOME" id="logo"></a></li>
          <li><a href="/community">Explore our communities</a></li>
-
       </ul>
    </nav>
    {{#if user}}
    <h4>Welcome {{user.name}}</h4>
    <br>
-   <a href="/profile">Go to profile</a>
-   <br>
-   <a href="/auth/logout">Logout</a>
+   <nav>
+      <a href="/profile">Go to profile</a>
 
+      <a href="/auth/logout">Logout</a>
+   </nav>
    {{else}}
    <nav>
       <ul>
          <li><a href="/auth/signup" id="signup-button">Sign Up</a></li>
          <li><a href="/auth/login" id="login-button">Login</a></li>
+      </ul>
    </nav>
    {{/if}}
-   {{{body}}}
+   <div class="container login-container">
+      <div class="card">
+         <div class="card-content"> {{{body}}}</div>
+      </div>
+   </div>
+
 
    <footer>
       <p>This project is sponsored by Ironluncher - always hungry, like a lump of iron.</p>
@@ -40,6 +50,7 @@
    </footer>
 
    <script src="/js/script.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 
 </html>

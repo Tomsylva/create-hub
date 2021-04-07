@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const passport = require("passport");
 // ℹ️ Handles password encryption
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
@@ -22,7 +22,6 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
   const { name, email, username, password } = req.body;
 
   if (!username || !email || !name || !password) {
-    console.log("HELLO?");
     return res.status(400).render("auth/signup", {
       errorMessage: "Please provide the info requested.",
     });
@@ -145,6 +144,20 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
       // return res.status(500).render("login", { errorMessage: err.message });
     });
 });
+
+// // @desc    Auth with Google
+// // @route   GET /auth/google
+// router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+// //   Google auth callback
+// //    GET /auth/google/callback
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", { failureRedirect: "/" }),
+//   (req, res) => {
+//     res.redirect("/dashboard");
+//   }
+// );
 
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
