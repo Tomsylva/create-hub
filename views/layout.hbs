@@ -5,7 +5,9 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
    <title>{{title}}</title>
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
       integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
@@ -14,13 +16,20 @@
 </head>
 
 <body>
+   <nav class="">
+      <div class="nav-wrapper container">
 
-   <nav>
-      <ul id="navbar-links">
-         <li><a href="/"><img src="/images/CRE8-logo.png" alt="HOME" id="logo"></a></li>
-         <li><a href="/community">Explore our communities</a></li>
-      </ul>
+         <a href="/"><img src="/images/CRE8-logo.png" alt="HOME" id="logo"></a>
+         <a href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large"><i class="fas fa-bars"></i></a>
+         <ul class="sidenav" id="mobile-demo">
+            <li><a href="/community">Explore our communities</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/views/community/new-discussion.hbs">Discussion</a></li>
+            <li><a href="/views/community/single-community.hbs">Community</a></li>
+         </ul>
+      </div>
    </nav>
+
    {{#if user}}
    <h4>Welcome {{user.name}}</h4>
    <br>
@@ -51,6 +60,14 @@
 
    <script src="/js/script.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+   <script>
+      M.Sidenav.init(document.querySelector('.sidenav'))
+      M.FormSelect.init(document.querySelector('#status'))
+      CKEDITOR.replace('body', {
+         plugins: 'wysiwygarea, toolbar, basicstyles, link'
+      })
+   </script>
 </body>
 
 </html>

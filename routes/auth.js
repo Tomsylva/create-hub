@@ -14,6 +14,20 @@ const User = require("../models/User.model");
 const shouldNotBeLoggedIn = require("../middlewares/shouldNotBeLoggedIn");
 const isLoggedIn = require("../middlewares/isLoggedIn");
 
+//    Auth with Google
+//    GET /auth/google
+router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+//     Google auth callback
+//   GET /auth/google/callback
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
+
 router.get("/signup", shouldNotBeLoggedIn, (req, res) => {
   res.render("auth/signup");
 });
@@ -144,20 +158,6 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
       // return res.status(500).render("login", { errorMessage: err.message });
     });
 });
-
-// // @desc    Auth with Google
-// // @route   GET /auth/google
-// router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-
-// //   Google auth callback
-// //    GET /auth/google/callback
-// router.get(
-//   "/google/callback",
-//   passport.authenticate("google", { failureRedirect: "/" }),
-//   (req, res) => {
-//     res.redirect("/dashboard");
-//   }
-// );
 
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {

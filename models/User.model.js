@@ -4,31 +4,56 @@ const { Schema, model } = require("mongoose");
 const userSchema = new Schema({
   username: {
     type: String,
-    required: true,
+    //required: true,
     unique: true,
   },
   name: {
     type: String,
-    required: true,
+    //required: true,
   },
   password: {
     type: String,
-    required: true,
+    //required: true,
   },
   userImage: {
     type: String,
   },
   email: {
     type: String,
-    required: true,
+    //required: true,
     unique: true,
   },
   bio: {
     type: String,
   },
-  tags: {
+  interests: {
     type: [String],
   },
+  id: { type: String },
+
+  // googleId: {
+  //   type: String,
+  //   required: true,
+  // },
+  // displayName: {
+  //   type: String,
+  //   required: true,
+  // },
+  // firstName: {
+  //   type: String,
+  //   required: true,
+  // },
+  // lastName: {
+  //   type: String,
+  //   required: true,
+  // },
+  // image: {
+  //   type: String,
+  // },
+  // createdAt: {
+  //   type: Date,
+  //   default: Date.now,
+  // },
 });
 
 const User = model("User", userSchema);
