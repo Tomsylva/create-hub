@@ -39,6 +39,8 @@ router.get(
           .catch(console.log("Tom is having a very bad day"));
         res.redirect(`community/${req.params.dynamicCommunity}`);
       });
+
+    //TRIED findOneAndUpdate
   }
 );
 
