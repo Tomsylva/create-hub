@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Community = require("../models/Community.model");
+const User = require("../models/User.model");
 const Discussion = require("../models/Discussion.model");
 const isLoggedIn = require("../middlewares/isLoggedIn");
 const apiURL = `http://api.mediastack.com/v1/news?access_key=${process.env.NEWS_API_KEY}`;
@@ -10,6 +11,36 @@ const axios = require("axios");
 router.get("/", (req, res) => {
   res.render("community/community-home");
 });
+
+router.get(
+  "/:dynamicCommunity/join",
+  isLoggedIn,
+  /*async*/ (req, res) => {
+    // try {
+    //   const newCommunity = await Community.findOne({
+    //     slug: req.params.dynamicCommunity,
+    //   });
+    //   newCommunity.update({ $addToSet: { members: req.session.user._id } });
+    // } catch (error) {
+    //   console.log(error);
+    //   return res.redirect(`/${req.params.dynamicCommunity}`);
+    // }
+    Community.findOne({ slug: req.params.dynamicCommunity })
+      .populate("members")
+      .then((singleCommunity) => {
+        if (!singleCommunity) {
+          return res.redirect("/");
+        }
+        singleCommunity
+          .update({
+            $addToSet: { members: req.session.user._id },
+          })
+          .then(console.log("SUCCESSFUL ADD"))
+          .catch(console.log("Tom is having a very bad day"));
+        res.redirect(`community/${req.params.dynamicCommunity}`);
+      });
+  }
+);
 
 // LINK FROM "START A CONVERSATION" BUTTON
 // Finds correct community and passes it with req-params and slug
