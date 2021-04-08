@@ -28,8 +28,8 @@ router.get("/edit", login, (req, res) => {
 });
 
 router.post("/edit", login, parser.single("image"), (req, res) => {
-  const { name, bio, interests, userImage } = req.body;
-
+  const { name, bio, interests } = req.body;
+  const userImage = req.file.path;
   User.findByIdAndUpdate(
     req.session.user._id,
     { name, interests, bio, userImage },

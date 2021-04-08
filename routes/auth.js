@@ -22,7 +22,7 @@ router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
 //   GET /auth/google/callback
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
+  passport.authenticate("google", { failureRedirect: "/auth/login" }),
   (req, res) => {
     res.redirect("/");
   }
@@ -161,6 +161,8 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
 
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
+    res.clearCookie("connect.sid");
+    res.redirect("/");
     if (err) {
       return res
         .status(500)

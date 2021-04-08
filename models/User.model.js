@@ -4,37 +4,44 @@ const { Schema, model } = require("mongoose");
 const userSchema = new Schema({
   username: {
     type: String,
-    //required: true,
+    required: true,
     unique: true,
   },
   name: {
     type: String,
-    //required: true,
+    required: true,
   },
   password: {
     type: String,
-    //required: true,
+    required: true,
   },
   userImage: {
     type: String,
   },
   email: {
     type: String,
-    //required: true,
+    required: true,
     unique: true,
   },
   bio: {
     type: String,
   },
   interests: {
-    type: [String],
+    type: String,
+    enum: [
+      "Music",
+      "Fine Art",
+      "Digital Art",
+      "Writing & Poetry",
+      "Photography",
+    ],
   },
   id: { type: String },
 
-  // googleId: {
-  //   type: String,
-  //   required: true,
-  // },
+  googleId: {
+    type: String,
+    //   required: true,
+  },
   // displayName: {
   //   type: String,
   //   required: true,
@@ -49,10 +56,6 @@ const userSchema = new Schema({
   // },
   // image: {
   //   type: String,
-  // },
-  // createdAt: {
-  //   type: Date,
-  //   default: Date.now,
   // },
 });
 
