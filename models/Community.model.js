@@ -14,21 +14,15 @@ const communitySchema = new Schema({
     type: String,
     required: true,
   },
-  members: {
-    type: [String], //CONNECT USERS
-  },
+  members: [{ type: Schema.Types.ObjectId, ref: "User" }],
   slug: {
     type: String,
   },
   numberOfMembers: {
     type: Number,
   },
-  discussionTopics: {
-    type: [String], //CONNECT DISCUSSION TOPICS
-  },
-  comments: {
-    type: [String], //CONNECT COMMENTS
-  },
+  discussionTopics: [{ type: Schema.Types.ObjectId, ref: "Discussion" }],
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   keyword: {
     type: String,
   },
