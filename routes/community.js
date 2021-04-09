@@ -12,38 +12,20 @@ router.get("/", (req, res) => {
   res.render("community/community-home");
 });
 
+// JOIN A COMMUNITY SPACE
 router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
-  // try {
-  //   const newCommunity = await Community.findOne({
-  //     slug: req.params.dynamicCommunity,
-  //   });
-  //   newCommunity.update({ $addToSet: { members: req.session.user._id } });
-  // } catch (error) {
-  //   console.log(error);
-  //   return res.redirect(`/${req.params.dynamicCommunity}`);
-  // }
-  // Community.findOne({ slug: req.params.dynamicCommunity })
-  //   .populate("members")
-  //   .then((singleCommunity) => {
-  //     if (!singleCommunity) {
-  //       return res.redirect("/");
-  //     }
-  //     singleCommunity
-  //       .update({
-  //         $addToSet: { members: req.session.user._id },
-  //       })
-  //       .then(console.log("SUCCESSFUL ADD"))
-  //       .catch(console.log("Tom is having a very bad day"));
-  //     res.redirect(`community/${req.params.dynamicCommunity}`);
-  //   });
-
   const singleCommunity = await Community.findOne({
     slug: req.params.dynamicCommunity,
   }).populate("members");
   singleCommunity.update({ $addToSet: { members: req.session.user._id } });
+
+  // STILL NEEDS TO UPDATE
+  const singleUser = await User.findByIdAndUpdate(req.session.user_id, {
+    $addToSet: { interests: singleCommunity._id },
+  });
+
   console.log("it worked");
-  res.render("community/community-home");
-  //TRIED findOneAndUpdate
+  res.render("community/community-joined");
 });
 
 // LINK FROM "START A CONVERSATION" BUTTON
