@@ -12,37 +12,39 @@ router.get("/", (req, res) => {
   res.render("community/community-home");
 });
 
-router.get(
-  "/:dynamicCommunity/join",
-  isLoggedIn,
-  /*async*/ (req, res) => {
-    // try {
-    //   const newCommunity = await Community.findOne({
-    //     slug: req.params.dynamicCommunity,
-    //   });
-    //   newCommunity.update({ $addToSet: { members: req.session.user._id } });
-    // } catch (error) {
-    //   console.log(error);
-    //   return res.redirect(`/${req.params.dynamicCommunity}`);
-    // }
-    Community.findOne({ slug: req.params.dynamicCommunity })
-      .populate("members")
-      .then((singleCommunity) => {
-        if (!singleCommunity) {
-          return res.redirect("/");
-        }
-        singleCommunity
-          .update({
-            $addToSet: { members: req.session.user._id },
-          })
-          .then(console.log("SUCCESSFUL ADD"))
-          .catch(console.log("Tom is having a very bad day"));
-        res.redirect(`community/${req.params.dynamicCommunity}`);
-      });
+router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
+  // try {
+  //   const newCommunity = await Community.findOne({
+  //     slug: req.params.dynamicCommunity,
+  //   });
+  //   newCommunity.update({ $addToSet: { members: req.session.user._id } });
+  // } catch (error) {
+  //   console.log(error);
+  //   return res.redirect(`/${req.params.dynamicCommunity}`);
+  // }
+  // Community.findOne({ slug: req.params.dynamicCommunity })
+  //   .populate("members")
+  //   .then((singleCommunity) => {
+  //     if (!singleCommunity) {
+  //       return res.redirect("/");
+  //     }
+  //     singleCommunity
+  //       .update({
+  //         $addToSet: { members: req.session.user._id },
+  //       })
+  //       .then(console.log("SUCCESSFUL ADD"))
+  //       .catch(console.log("Tom is having a very bad day"));
+  //     res.redirect(`community/${req.params.dynamicCommunity}`);
+  //   });
 
-    //TRIED findOneAndUpdate
-  }
-);
+  const singleCommunity = await Community.findOne({
+    slug: req.params.dynamicCommunity,
+  }).populate("members");
+  singleCommunity.update({ $addToSet: { members: req.session.user._id } });
+  console.log("it worked");
+  res.render("community/community-home");
+  //TRIED findOneAndUpdate
+});
 
 // LINK FROM "START A CONVERSATION" BUTTON
 // Finds correct community and passes it with req-params and slug
