@@ -44,7 +44,6 @@ router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
 });
 
 // CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
-// Add logged in middleware when available !!!!!
 router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   const dynamicCommunity = req.params.dynamicCommunity;
   const { title, firstPost } = req.body;
@@ -68,7 +67,10 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
       .then((createdDiscussion) => {
         // CURRENTLY REDIRECTS TO COMMUNITY HOME
         console.log("Amazing!");
-        res.redirect(`/${dynamicCommunity}`);
+        dynamicCommunity.update({
+          $addToSet: { discussionTopics: createdDiscussion._id },
+        });
+        res.render(`/${req.params.dynamicCommunity.slug}`);
       })
       .catch((err) => {
         console.log("Sad times :(", err);
