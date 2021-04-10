@@ -9,7 +9,7 @@ const axios = require("axios");
 //let apidata;
 
 router.get("/", (req, res) => {
-  res.render("community/community-home");
+  res.render("community/community-home", { user: req.session.user._id });
 });
 
 // JOIN A COMMUNITY SPACE
@@ -21,12 +21,13 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
   singleCommunity.update({ $addToSet: { members: req.session.user._id } });
 
   // STILL NEEDS TO UPDATE
-  const singleUser = await User.findById(req.session.user_id).populate(
+  const singleUser = await User.findById(req.session.user._id).populate(
     "interests"
   );
-  // singleUser.update({ $addToSet: { interests: singleCommunity._id } });
+  singleUser.update({ $addToSet: { interests: singleCommunity._id } });
   res.render("community/community-joined", {
     activeSlug: req.params.dynamicCommunity,
+    user: req.session.user._id,
   });
 });
 
@@ -40,6 +41,7 @@ router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
       }
       res.render("community/new-discussion", {
         singleCommunity: singleCommunity,
+        user: req.session.user._id,
       });
     }
   );
@@ -53,6 +55,7 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   if (!title || !firstPost) {
     res.render("community/new-discussion", {
       errorMessage: "Please fill in both fields",
+      user: req.session.user._id,
     });
     return;
   }
@@ -60,6 +63,7 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
     if (found) {
       return res.render("community/new-discussion", {
         errorMessage: "Discussion already exists",
+        user: req.session.user._id,
       });
     }
     Discussion.create({
@@ -82,6 +86,7 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
         console.log("Sad times :(", err);
         res.render("community/new-discussion", {
           errorMessage: "Something went wrong",
+          user: req.session.user._id,
         });
       });
   });
@@ -100,6 +105,7 @@ router.get("/:dynamicCommunity", (req, res) => {
         res.render("community/single-community", {
           singleCommunity: singleCommunity,
           apidata: apidata,
+          user: req.session.user._id,
         });
       });
     }
