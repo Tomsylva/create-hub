@@ -7,7 +7,7 @@ const passport = require("passport");
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
 const Comment = require("../models/Comment.model");
-google;
+
 router.get(
   "/google",
   login,
