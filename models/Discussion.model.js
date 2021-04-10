@@ -8,15 +8,14 @@ const discussionSchema = new Schema({
     required: true,
   },
   createdBy: {
-    type: String, //CONNECT A USER
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
   firstPost: {
     type: String,
     required: true,
   },
-  comments: {
-    type: [String], //CONNECT COMMENTS
-  },
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   numberOfComments: {
     type: Number,
     default: 0,

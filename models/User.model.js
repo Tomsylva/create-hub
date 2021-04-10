@@ -26,9 +26,33 @@ const userSchema = new Schema({
   bio: {
     type: String,
   },
-  tags: {
-    type: [String],
+  interests: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Community",
+    },
+  ],
+  id: { type: String },
+
+  googleId: {
+    type: String,
+    //   required: true,
   },
+  // displayName: {
+  //   type: String,
+  //   required: true,
+  // },
+  // firstName: {
+  //   type: String,
+  //   required: true,
+  // },
+  // lastName: {
+  //   type: String,
+  //   required: true,
+  // },
+  // image: {
+  //   type: String,
+  // },
 });
 
 const User = model("User", userSchema);

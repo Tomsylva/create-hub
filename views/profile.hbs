@@ -1,12 +1,14 @@
 {{#with user}}
 <img src="{{userImage}}">
 
-<h4>Welcome {{name}} to your profile</h4>
-
 <a href="/profile/edit">Edit your profile</a>
 {{#if bio}}
+<p>{{name}}</p>
+
 <p>{{bio}}</p>
 <p>{{interests}}</p>
+
 <ul>{{community}}</ul>
 {{/if}}
+<a href="/profile/delete">Delete Profile</a>
 {{/with}}

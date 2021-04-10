@@ -1,17 +1,27 @@
 <h4>Edit Profile</h4>
 
 {{#with user}}
+<div class="container login-container">
+  <div class="card">
+    <div class="card-content">
+      <form method="POST" action="/profile/edit" enctype="multipart/form-data">
+        <label>Name</label>
+        <input name="name" value="{{name}}">
+        <br>
+        <label>Bio</label>
+        <input name="bio" value="{{bio}}">
+        <br>
+        <label>Interests</label>
 
-<form method="POST" action="/profile/edit">
-  <label>Name</label>
-  <input name="name" value="{{name}}">
-  <br>
-  <label>Bio</label>
-  <input name="bio" value="{{bio}}">
-  <br>
-  <label>Interests</label>
-  <input name="interests" value="{{interests}}">
-  <button type="submit">Submit</button>
-</form>
+
+        <input name="interests" value="{{interests}}">
+        <br>
+        <label>Profile pic</label>
+        <input type="file" name="image">
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
 
 {{/with}}

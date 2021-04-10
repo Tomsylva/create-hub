@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const passport = require("passport");
 // ℹ️ Handles password encryption
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
@@ -14,6 +14,20 @@ const User = require("../models/User.model");
 const shouldNotBeLoggedIn = require("../middlewares/shouldNotBeLoggedIn");
 const isLoggedIn = require("../middlewares/isLoggedIn");
 
+//    Auth with Google
+//    GET /auth/google
+router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+//     Google auth callback
+//   GET /auth/google/callback
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/auth/login" }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
+
 router.get("/signup", shouldNotBeLoggedIn, (req, res) => {
   res.render("auth/signup");
 });
@@ -21,14 +35,14 @@ router.get("/signup", shouldNotBeLoggedIn, (req, res) => {
 router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
   const { name, email, username, password } = req.body;
 
-  if (!username) {
-    return res
-      .status(400)
-      .render("signup", { errorMessage: "Please provide your username." });
+  if (!username || !email || !name || !password) {
+    return res.status(400).render("auth/signup", {
+      errorMessage: "Please provide the info requested.",
+    });
   }
 
   if (password.length < 8) {
-    return res.status(400).render("signup", {
+    return res.status(400).render("auth/signup", {
       errorMessage: "Your password needs to be at least 8 characters long.",
     });
   }
@@ -51,7 +65,7 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
     if (found) {
       return res
         .status(400)
-        .render("signup", { errorMessage: "Username already taken." });
+        .render("auth/signup", { errorMessage: "Username already taken." });
     }
 
     // if user is not found, create a new user - start with hashing the password
@@ -62,6 +76,8 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
         // Create a user and save it in the database
         return User.create({
           username,
+          email,
+          name,
           password: hashedPassword,
         });
       })
@@ -72,19 +88,21 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
       })
       .catch((error) => {
         if (error instanceof mongoose.Error.ValidationError) {
+          console.log(error);
+
           return res
             .status(400)
-            .render("signup", { errorMessage: error.message });
+            .render("auth/signup", { errorMessage: error.message });
         }
         if (error.code === 11000) {
-          return res.status(400).render("signup", {
+          return res.status(400).render("auth/signup", {
             errorMessage:
               "Username need to be unique. The username you chose is already in use.",
           });
         }
         return res
           .status(500)
-          .render("signup", { errorMessage: error.message });
+          .render("auth/signup", { errorMessage: error.message });
       });
   });
 });
@@ -99,13 +117,13 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
   if (!username) {
     return res
       .status(400)
-      .render("login", { errorMessage: "Please provide your username." });
+      .render("auth/login", { errorMessage: "Please provide your username." });
   }
 
   // Here we use the same logic as above
   // - either length based parameters or we check the strength of a password
   if (password.length < 8) {
-    return res.status(400).render("login", {
+    return res.status(400).render("auth/login", {
       errorMessage: "Your password needs to be at least 8 characters long.",
     });
   }
@@ -117,7 +135,7 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
       if (!user) {
         return res
           .status(400)
-          .render("login", { errorMessage: "Wrong credentials." });
+          .render("auth/login", { errorMessage: "Wrong credentials." });
       }
 
       // If user is found based on the username, check if the in putted password matches the one saved in the database
@@ -125,7 +143,7 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
         if (!isSamePassword) {
           return res
             .status(400)
-            .render("login", { errorMessage: "Wrong credentials." });
+            .render("auth/login", { errorMessage: "Wrong credentials." });
         }
         req.session.user = user;
         // req.session.user = user._id; // ! better and safer but in this case we saving the entire user object
@@ -143,6 +161,7 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
 
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
+    res.clearCookie("connect.sid");
     if (err) {
       return res
         .status(500)

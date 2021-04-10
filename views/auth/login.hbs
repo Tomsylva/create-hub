@@ -1,13 +1,24 @@
-<form action="/auth/login" method="POST">
-   <label> Username
-      <input type="text" name="username">
-   </label>
-   <label> Password
-      <input type="password" name="password">
-   </label>
+<div class="container login-container">
+   <div class="card">
+      <div class="card-content">
 
-   <button type="submit">Submit</button>
-</form>
+         <div class="divider"></div>
+         <div class="section">
+            <a href="/auth/google" class="btn red darken-1">
+               <i class="fab fa-google left"></i> Login With Google
+            </a>
+         </div>
+         <form action="/auth/login" method="POST">
+            <label> Username
+               <input type="text" name="username">
+            </label>
+            <label> Password
+               <input type="password" name="password">
+            </label>
 
+            <button type="submit">Submit</button>
+         </form>
 
-   
+      </div>
+   </div>
+</div>
