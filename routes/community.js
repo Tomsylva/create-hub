@@ -23,7 +23,7 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
   const singleUser = await User.findById(req.session.user_id).populate(
     "interests"
   );
-  singleUser.update({ $addToSet: { interests: singleCommunity._id } });
+  // singleUser.update({ $addToSet: { interests: singleCommunity._id } });
 
   console.log("it worked");
   res.render("community/community-joined");
@@ -45,6 +45,7 @@ router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
 });
 
 // CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
+// CCURRENTLY REDIRECTS CORRECTLY HOWEVER DOES NOT PUSH TO COMMUNITY DISCUSSION TOPIC ARRAY
 router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   const dynamicCommunity = req.params.dynamicCommunity;
   const { title, firstPost } = req.body;
@@ -66,12 +67,15 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
       createdBy: req.session.user._id,
     })
       .then((createdDiscussion) => {
-        // CURRENTLY REDIRECTS TO COMMUNITY HOME
         console.log("Amazing!");
-        dynamicCommunity.update({
-          $addToSet: { discussionTopics: createdDiscussion._id },
+        Community.findOne({
+          slug: dynamicCommunity,
+        }).then((currentCommunity) => {
+          currentCommunity.update({
+            $addToSet: { discussionTopics: createdDiscussion._id },
+          });
         });
-        res.render(`/${req.params.dynamicCommunity.slug}`);
+        res.redirect(`/community/${req.params.dynamicCommunity}`);
       })
       .catch((err) => {
         console.log("Sad times :(", err);
