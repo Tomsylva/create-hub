@@ -9,7 +9,7 @@
         <a href="/community/{{singleCommunity.slug}}/new-discussion">Start a conversation</a>
         {{#each discussions}}
         <div>
-            <h5>{{this.title}}</h5>
+            <h5><a href="/community/{{../singleCommunity.slug}}/discussion/{{this._id}}">{{this.title}}</a></h5>
             <p>{{this.firstPost}}</p>
         </div>
         {{/each}}

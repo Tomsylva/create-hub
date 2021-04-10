@@ -90,6 +90,28 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   });
 });
 
+// LOADS DISCUSSION PAGE DYNAMICALLY - not yet working
+router.get(
+  "/:dynamicCommunity/discussion/:dynamicDiscussion",
+  isLoggedIn,
+  (req, res) => {
+    Community.findOne({ slug: req.params.dynamicCommunity })
+      .populate("discussionTopics")
+      .then((singleCommunity) => {
+        console.log("PART 1 WORKED");
+        Discussion.findOne({ _id: req.params.dynamicDiscussion }).then(
+          (singleDiscussion) => {
+            console.log("PART 2 WORKED");
+            res.render("community/discussion", {
+              community: singleCommunity,
+              discussion: singleDiscussion,
+            });
+          }
+        );
+      });
+  }
+);
+
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
 // Each community can be viewed by anybody not signed in
 router.get("/:dynamicCommunity", (req, res) => {
