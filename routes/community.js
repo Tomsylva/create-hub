@@ -98,10 +98,8 @@ router.get(
     Community.findOne({ slug: req.params.dynamicCommunity })
       .populate("discussionTopics")
       .then((singleCommunity) => {
-        console.log("PART 1 WORKED");
         Discussion.findOne({ _id: req.params.dynamicDiscussion }).then(
           (singleDiscussion) => {
-            console.log("PART 2 WORKED");
             res.render("community/discussion", {
               community: singleCommunity,
               discussion: singleDiscussion,
@@ -111,6 +109,31 @@ router.get(
       });
   }
 );
+
+// MAKING COMMENTS - not yet working
+// router.post(
+//   "/:dynamicCommunity/discussion/:dynamicDiscussion/comment",
+//   isLoggedIn,
+//   (req, res) => {
+//     Community.findOne({ slug: req.params.dynamicCommunity })
+//       .populate("discussionTopics")
+//       .then((singleCommunity) => {
+//         Discussion.findById(req.params.dynamicDiscussion).then(
+//           (singleDiscussion) => {
+//             const { title, text } = req.body;
+//             Comment.create({
+//               title,
+//               text,
+//               createdBy: req.session.user._id,
+//             }).then((newComment) => {
+//               console.log(newComment);
+//               res.redirect(`/community/${singleCommunity.slug}`);
+//             });
+//           }
+//         );
+//       });
+//   }
+// );
 
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
 // Each community can be viewed by anybody not signed in
