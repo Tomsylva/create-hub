@@ -162,7 +162,7 @@ router.post("/login", shouldNotBeLoggedIn, (req, res, next) => {
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
     res.clearCookie("connect.sid");
-    res.redirect("/");
+
     if (err) {
       return res
         .status(500)
