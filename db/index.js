@@ -20,9 +20,9 @@ mongoose
     console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`
     );
-    Community.insertMany(CommunityDb).then(() => {
-      console.log("Hey there you fat seagull, get off my chips");
-    });
+    // Community.insertMany(CommunityDb).then(() => {
+    //   console.log("Hey there you fat seagull, get off my chips");
+    // });
   })
   .catch((err) => {
     console.error("Error connecting to mongo: ", err);
