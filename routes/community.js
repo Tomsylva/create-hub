@@ -18,13 +18,15 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
     slug: req.params.dynamicCommunity,
   }).populate("members");
 
-  singleCommunity.update({ $addToSet: { members: req.session.user._id } });
+  await singleCommunity.update({
+    $addToSet: { members: req.session.user._id },
+  });
 
   // STILL NEEDS TO UPDATE
   const singleUser = await User.findById(req.session.user._id).populate(
     "interests"
   );
-  singleUser.update({ $addToSet: { interests: singleCommunity._id } });
+  await singleUser.update({ $addToSet: { interests: singleCommunity._id } });
   res.render("community/community-joined", {
     activeSlug: req.params.dynamicCommunity,
     user: req.session.user._id,
