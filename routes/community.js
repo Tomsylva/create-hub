@@ -24,9 +24,9 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
     "interests"
   );
   // singleUser.update({ $addToSet: { interests: singleCommunity._id } });
-
-  console.log("it worked");
-  res.render("community/community-joined");
+  res.render("community/community-joined", {
+    activeSlug: req.params.dynamicCommunity,
+  });
 });
 
 // LINK FROM "START A CONVERSATION" BUTTON
