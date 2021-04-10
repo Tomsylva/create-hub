@@ -20,9 +20,10 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
   singleCommunity.update({ $addToSet: { members: req.session.user._id } });
 
   // STILL NEEDS TO UPDATE
-  const singleUser = await User.findByIdAndUpdate(req.session.user_id, {
-    $addToSet: { interests: singleCommunity._id },
-  });
+  const singleUser = await User.findById(req.session.user_id).populate(
+    "interests"
+  );
+  singleUser.update({ $addToSet: { interests: singleCommunity._id } });
 
   console.log("it worked");
   res.render("community/community-joined");
@@ -86,7 +87,6 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
 router.get("/:dynamicCommunity", (req, res) => {
   Community.findOne({ slug: req.params.dynamicCommunity }).then(
     (singleCommunity) => {
-      console.log("singleCommuniotz", singleCommunity);
       if (!singleCommunity) {
         return res.redirect("/");
       }

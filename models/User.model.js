@@ -26,16 +26,12 @@ const userSchema = new Schema({
   bio: {
     type: String,
   },
-  interests: {
-    type: String,
-    enum: [
-      "Music",
-      "Fine Art",
-      "Digital Art",
-      "Writing & Poetry",
-      "Photography",
-    ],
-  },
+  interests: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Community",
+    },
+  ],
   id: { type: String },
 
   googleId: {
