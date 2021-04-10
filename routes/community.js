@@ -14,17 +14,16 @@ router.get("/", (req, res) => {
 
 // JOIN A COMMUNITY SPACE
 router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
-  const singleCommunity = await Community.findOne({
-    slug: req.params.dynamicCommunity,
-  }).populate("members");
+  const singleCommunity = await Community.findOneAndUpdate(
+    {
+      slug: req.params.dynamicCommunity,
+    },
+    { $addToSet: { members: req.session.user._id } }
+  ).populate("members");
 
-  singleCommunity.update({ $addToSet: { members: req.session.user._id } });
-
-  // STILL NEEDS TO UPDATE
-  const singleUser = await User.findById(req.session.user._id).populate(
-    "interests"
-  );
-  singleUser.update({ $addToSet: { interests: singleCommunity._id } });
+  await User.findByIdAndUpdate(req.session.user._id, {
+    $addToSet: { interests: singleCommunity._id },
+  });
   res.render("community/community-joined", {
     activeSlug: req.params.dynamicCommunity,
     user: req.session.user._id,
@@ -48,7 +47,6 @@ router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
 });
 
 // CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
-// CCURRENTLY REDIRECTS CORRECTLY HOWEVER DOES NOT PUSH TO COMMUNITY DISCUSSION TOPIC ARRAY
 router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
   const dynamicCommunity = req.params.dynamicCommunity;
   const { title, firstPost } = req.body;
@@ -72,15 +70,15 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
       createdBy: req.session.user._id,
     })
       .then((createdDiscussion) => {
-        console.log("Amazing!");
-        Community.findOne({
-          slug: dynamicCommunity,
-        }).then((currentCommunity) => {
-          currentCommunity.update({
-            $addToSet: { discussionTopics: createdDiscussion._id },
-          });
+        console.log("Amazing! Created discussion", createdDiscussion);
+        Community.findOneAndUpdate(
+          { slug: dynamicCommunity },
+          { $addToSet: { discussionTopics: createdDiscussion._id } },
+          { new: true }
+        ).then((updatedCommunity) => {
+          console.log("Updated comunnity", updatedCommunity);
+          res.redirect(`/community/${req.params.dynamicCommunity}`);
         });
-        res.redirect(`/community/${req.params.dynamicCommunity}`);
       })
       .catch((err) => {
         console.log("Sad times :(", err);
@@ -95,21 +93,23 @@ router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
 // Each community can be viewed by anybody not signed in
 router.get("/:dynamicCommunity", (req, res) => {
-  Community.findOne({ slug: req.params.dynamicCommunity }).then(
-    (singleCommunity) => {
+  Community.findOne({ slug: req.params.dynamicCommunity })
+    .populate("discussionTopics")
+    .then((singleCommunity) => {
       if (!singleCommunity) {
         return res.redirect("/");
       }
       let keyword = singleCommunity.keyword;
+      let discussions = singleCommunity.discussionTopics;
       getNewsStories(keyword).then((apidata) => {
         res.render("community/single-community", {
           singleCommunity: singleCommunity,
           apidata: apidata,
           user: req.session.user._id,
+          discussions: discussions,
         });
       });
-    }
-  );
+    });
 });
 
 function getNewsStories(keyword) {
