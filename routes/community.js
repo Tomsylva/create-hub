@@ -17,6 +17,7 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
   const singleCommunity = await Community.findOne({
     slug: req.params.dynamicCommunity,
   }).populate("members");
+
   singleCommunity.update({ $addToSet: { members: req.session.user._id } });
 
   // STILL NEEDS TO UPDATE
