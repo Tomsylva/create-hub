@@ -10,9 +10,7 @@ const commentSchema = new Schema({
     type: String,
     required: true,
   },
-  createdBy: {
-    type: String, //CONNECT A USER
-  },
+  //createdBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
   likes: {
     type: Number,
     default: 0,
