@@ -163,4 +163,36 @@ footer p {
   text-align: center;
 }
 
+/* PROFILE PAGE STYLING */
+
+#profile-info {
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#user-name {
+  color: #797979;
+}
+
+#user-name span {
+  color: #216b37;
+}
+
+#edit-profile-links {
+  padding: 10px 0 0 0;
+}
+
+#edit-profile-links a {
+  padding: 0 10px 0 0;
+}
+
+#user-image {
+  width: 150px;
+  height: 150px;
+  border: 1px solid #797979;
+  margin: 50px 0;
+}
+
 /*# sourceMappingURL=style.css.map */
