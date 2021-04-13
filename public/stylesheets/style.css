@@ -37,19 +37,10 @@ nav {
 
 #navbar-links {
   list-style: none;
-}
-
-#navbar-links li {
-  display: inline;
-  padding: 0 20px 0 0;
-}
-
-#signup-button,
-#login-button,
-#logout-button,
-#profile-button {
-  float: right;
-  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
 nav li a {

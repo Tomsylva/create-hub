@@ -18,11 +18,11 @@
          {{!-- <li><a href="/">Home</a></li> --}}
          <li><a href="/community" id="community-button">Communities</a></li>
          {{#if user}}
-         <li><a href="/profile" id="profile-button">Go to profile</a></li>
-         <li><a href="/auth/logout" id="logout-button">Logout</a></li>
+         <li><a href="/profile" class="right-button">Go to profile</a></li>
+         <li><a href="/auth/logout" class="right-button">Logout</a></li>
          {{else}}
-         <li><a href="/auth/signup" id="signup-button">Sign Up</a></li>
-         <li><a href="/auth/login" id="login-button">Login</a></li>
+         <li><a href="/auth/signup" class="right-button">Sign Up</a></li>
+         <li><a href="/auth/login" class="right-button">Login</a></li>
          {{/if}}
       </ul>
    </nav>
