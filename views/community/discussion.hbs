@@ -4,8 +4,11 @@
 <a href="/community/{{community.slug}}">Back to {{community.name}} community</a>
 
 <h3>Leave a comment</h3>
-<form action="/community/{{community.slug}}/discussion/{{discussion._id}}/comment" method="POST">
+<form action="/community/{{community.slug}}/discussion/{{discussion._id}}/comment" method="POST"
+    enctype="multipart/form-data">
     <input type="text" name="title" placeholder="Title">
     <input type="text" name="text" placeholder="Text">
+    <label>Upload your own Art</label>
+    <input type="file" name="image">
     <button type="submit">Comment</button>
 </form>

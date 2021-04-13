@@ -5,7 +5,7 @@ const Discussion = require("../models/Discussion.model");
 const isLoggedIn = require("../middlewares/isLoggedIn");
 const apiURL = `http://api.mediastack.com/v1/news?access_key=${process.env.NEWS_API_KEY}`;
 const axios = require("axios");
-
+const parser = require("../config/cloudinary");
 //let apidata;
 
 router.get("/", (req, res) => {
@@ -47,48 +47,60 @@ router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
 });
 
 // CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
-router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
-  const dynamicCommunity = req.params.dynamicCommunity;
-  const { title, firstPost } = req.body;
-  if (!title || !firstPost) {
-    res.render("community/new-discussion", {
-      errorMessage: "Please fill in both fields",
-      user: req.session.user._id,
-    });
-    return;
-  }
-  Discussion.findOne({ title }).then((found) => {
-    if (found) {
-      return res.render("community/new-discussion", {
-        errorMessage: "Discussion already exists",
+router.post(
+  "/:dynamicCommunity/new-discussion",
+  isLoggedIn,
+  parser.single("image"),
+  (req, res) => {
+    const dynamicCommunity = req.params.dynamicCommunity;
+    const { title, firstPost } = req.body;
+    const image = req.file.path;
+    if (!title || !firstPost) {
+      res.render("community/new-discussion", {
+        errorMessage: "Please fill in both fields",
         user: req.session.user._id,
       });
+      return;
     }
-    Discussion.create({
-      title,
-      firstPost,
-      createdBy: req.session.user._id,
-    })
-      .then((createdDiscussion) => {
-        console.log("Amazing! Created discussion", createdDiscussion);
-        Community.findOneAndUpdate(
-          { slug: dynamicCommunity },
-          { $addToSet: { discussionTopics: createdDiscussion._id } },
-          { new: true }
-        ).then((updatedCommunity) => {
-          console.log("Updated comunnity", updatedCommunity);
-          res.redirect(`/community/${req.params.dynamicCommunity}`);
-        });
-      })
-      .catch((err) => {
-        console.log("Sad times :(", err);
-        res.render("community/new-discussion", {
-          errorMessage: "Something went wrong",
-          user: req.session.user._id,
-        });
+    Discussion.findOne({ title })
+      .populate("User")
+      .then((found) => {
+        if (!found) {
+          return res.redirect("/");
+        }
+        if (found) {
+          return res.render("community/new-discussion", {
+            errorMessage: "Discussion already exists",
+            user: req.session.user._id,
+          });
+        }
+        Discussion.create({
+          title,
+          firstPost,
+          image,
+          createdBy: req.session.user._id,
+        })
+          .then((createdDiscussion) => {
+            console.log("Amazing! Created discussion", createdDiscussion);
+            Community.findOneAndUpdate(
+              { slug: dynamicCommunity },
+              { $addToSet: { discussionTopics: createdDiscussion._id } },
+              { new: true }
+            ).then((updatedCommunity) => {
+              console.log("Updated comunnity", updatedCommunity);
+              res.redirect(`/community/${req.params.dynamicCommunity}`);
+            });
+          })
+          .catch((err) => {
+            console.log("Sad times :(", err);
+            res.render("community/new-discussion", {
+              errorMessage: "Something went wrong",
+              user: req.session.user._id,
+            });
+          });
       });
-  });
-});
+  }
+);
 
 // LOADS DISCUSSION PAGE DYNAMICALLY - not yet working
 router.get(

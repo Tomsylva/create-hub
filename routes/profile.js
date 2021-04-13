@@ -18,12 +18,20 @@ router.get("/edit", isLoggedIn, (req, res) => {
 
 router.post("/edit", isLoggedIn, parser.single("image"), (req, res) => {
   const { name, bio, interests } = req.body;
-  const userImage = req.file.path;
-  User.findByIdAndUpdate(
-    req.session.user._id,
-    { name, interests, bio, userImage },
-    { new: true }
-  ).then((newUser) => {
+  const userImage = req.file?.path;
+
+  console.log("LOOK");
+
+  const toClean = { name, bio, interests, userImage }; // {name:" sakdjfhsadkjfhsa", bio:"aksjdfhasdkfjh", userImage: "12340298"}
+
+  const updater = Object.fromEntries(
+    Object.entries(toClean).filter((el) => el[1]) //filter out everything that doesnt have a first position truthy
+  );
+
+  const beforeObjectUpdater = { name, interests, bio, userImage };
+  User.findByIdAndUpdate(req.session.user._id, updater, {
+    new: true,
+  }).then((newUser) => {
     console.log("newUser:", newUser);
     req.session.user = newUser;
     res.redirect("/profile");
@@ -35,6 +43,8 @@ router.get("/delete", isLoggedIn, async (req, res) => {
   // Delete the user document in the users collection
   await User.findByIdAndDelete(userId);
 
+  console.log("HERE");
+
   // list all of the users communities -> needs to be checked whenever you merge code with tom
   const allUserCommunities = await Community.find({
     members: { $in: userId },
@@ -43,7 +53,7 @@ router.get("/delete", isLoggedIn, async (req, res) => {
   // assuming the code above is correct, this edits ALL of the communities removing the user
   const updatedCommunities = allUserCommunities.map((community) => {
     return Community.findByIdAndUpdate(community._id, {
-      $pop: { members: userId },
+      $pull: { members: userId },
     });
   });
   // making sure every promise runes
