@@ -5,7 +5,9 @@
 
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: rgb(248, 250, 250);
 }
+
 .login-container {
   width: 400px;
   margin-top: 50px;
@@ -27,7 +29,7 @@ h1 {
 nav {
   background: linear-gradient(
     0deg,
-    rgba(255, 255, 255, 1) 25%,
+    rgba(248, 250, 250, 1) 25%,
     rgba(184, 212, 193, 1) 100%
   );
   padding: 25px 50px;
@@ -96,9 +98,10 @@ nav li a {
 }
 
 #home-left img {
-  width: 50%;
-  height: 40%;
-  padding-top: 25%;
+  width: 40%;
+  height: 30%;
+  padding-top: 40%;
+  padding-right: 20%;
 }
 
 #home-left {
@@ -106,11 +109,9 @@ nav li a {
   flex-direction: row;
   align-content: center;
   justify-content: center;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 78%,
-    rgba(184, 212, 193, 1) 100%
-  );
+  background-image: url(/images/IMG_0053.PNG);
+  background-position: center;
+  background-size: contain;
 }
 
 #homepage-bottom {
