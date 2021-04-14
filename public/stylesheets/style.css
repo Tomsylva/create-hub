@@ -25,7 +25,11 @@ h1 {
 /* NAVBAR STYLING */
 
 nav {
-  background-color: #b8d4c1;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 25%,
+    rgba(184, 212, 193, 1) 100%
+  );
   padding: 25px 50px;
 }
 
@@ -98,11 +102,15 @@ nav li a {
 }
 
 #home-left {
-  background-color: #4e805d21;
   display: flex;
   flex-direction: row;
   align-content: center;
   justify-content: center;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 78%,
+    rgba(184, 212, 193, 1) 100%
+  );
 }
 
 #homepage-bottom {
