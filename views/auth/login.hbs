@@ -1,19 +1,11 @@
-<div class="container login-container">
-   <div class="card">
-      <div class="card-content">
+<div class="basic-form">
 
+   <form action="/auth/login" method="POST" class="select-form">
+      <input type="text" name="username" placeholder="Username" class="basic-input">
+      <br>
+      <input type="password" name="password" placeholder="Password" class="basic-input">
+      <br>
+      <button type="submit" class="basic-button">Log in</button>
+   </form>
 
-         <form action="/auth/login" method="POST">
-            <label> Username
-               <input type="text" name="username">
-            </label>
-            <label> Password
-               <input type="password" name="password">
-            </label>
-
-            <button type="submit">Submit</button>
-         </form>
-
-      </div>
-   </div>
 </div>
