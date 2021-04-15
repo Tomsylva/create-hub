@@ -9,7 +9,7 @@ const parser = require("../config/cloudinary");
 //let apidata;
 
 router.get("/", (req, res) => {
-  res.render("community/community-home", { user: req.session.user._id });
+  res.render("community/community-home", { user: req.session.user });
 });
 
 // JOIN A COMMUNITY SPACE
@@ -162,7 +162,7 @@ router.get("/:dynamicCommunity", (req, res) => {
         res.render("community/single-community", {
           singleCommunity: singleCommunity,
           apidata: apidata,
-          user: req.session.user._id,
+          user: req.session.user,
           discussions: discussions,
         });
       });
