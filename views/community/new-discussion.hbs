@@ -1,10 +1,12 @@
 <h1>Start a new Discussion in the {{singleCommunity.name}} Community</h1>
 
-<form action="/community/{{singleCommunity.slug}}/new-discussion" method="POST">
+<form action="/community/{{singleCommunity.slug}}/new-discussion" method="POST" enctype="multipart/form-data">
     <input type="text" name="title" id="title" placeholder="Topic">
     <br>
     <input type="text" name="firstPost" id="firstPost" placeholder="About">
     <br>
+    <label>Upload your own Art</label>
+    <input type="file" name="image">
     <button type="submit">Hit me!</button>
 </form>
 
