@@ -65,6 +65,7 @@ nav li a:hover {
 #community-body {
   display: flex;
   flex-direction: row;
+  padding: 20px 5px 5px 5px;
 }
 
 #news-panel {
@@ -75,17 +76,40 @@ nav li a:hover {
   width: 60vw;
 }
 
+.discussion-block {
+  padding: 10px;
+}
+
+.discussion-block:nth-child(odd) {
+  background-color: rgba(166, 194, 192, 0.75);
+}
+
 #news-panel ul {
   list-style: none;
 }
 
 #news-panel ul li {
-  border: 1px solid black;
   padding: 10px;
+}
+
+.news-item:nth-child(even) {
+  background-color: rgba(184, 212, 193, 0.75);
 }
 
 #error-message {
   color: red;
+}
+
+#join-community-button {
+  text-decoration: none;
+  border: 1px solid #797979;
+  padding: 15px;
+  border-radius: 7px;
+  margin: 30px;
+}
+
+#about-community {
+  padding: 15px;
 }
 
 /* HOMEPAGE STYLING */
@@ -149,7 +173,7 @@ footer p {
 
 /* COMMUNITY HOME PAGE */
 
-#community-title {
+.community-title {
   text-align: center;
   color: #797979;
   padding: 50px;
