@@ -105,11 +105,16 @@ nav li a:hover {
   border: 1px solid #797979;
   padding: 15px;
   border-radius: 7px;
-  margin: 30px;
+}
+
+#join-community-button:hover {
+  background-color: rgba(166, 194, 192, 0.75);
+  transition: background-color 0.5s;
 }
 
 #about-community {
   padding: 15px;
+  text-align: center;
 }
 
 /* HOMEPAGE STYLING */
@@ -147,12 +152,8 @@ nav li a:hover {
 }
 
 #homepage-bottom {
-  padding: 25px 50px;
+  padding: 25px 50px 100px 50px;
   text-align: center;
-}
-
-#homepage-bottom p {
-  color: #797979;
 }
 
 footer {
@@ -218,7 +219,9 @@ footer p {
   align-items: center;
 }
 
-#user-name {
+#user-name,
+.basic-label,
+#homepage-bottom p {
   color: #797979;
 }
 
@@ -286,10 +289,6 @@ footer p {
   margin-top: 100px;
 }
 
-.basic-label {
-  color: #474747;
-}
-
 .file-input {
   color: #797979;
   padding: 15px;
@@ -299,6 +298,13 @@ footer p {
   color: #797979;
   text-align: center;
   padding-top: 50px;
+}
+
+/* DISCUSSION */
+
+.discussion-description,
+.back-button {
+  text-align: center;
 }
 
 /*# sourceMappingURL=style.css.map */
