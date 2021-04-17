@@ -45,7 +45,9 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
   */
 
   // Search the database for a user with the username submitted in the form
-  User.findOne({ $or: [{ username }, { email }] }).then((found) => {
+  User.findOne({
+    $or: [{ username }, { email }],
+  }).then((found) => {
     // If the user is found, send the message username is taken
     if (found) {
       return res

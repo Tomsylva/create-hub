@@ -19,6 +19,10 @@ const discussionSchema = new Schema({
     type: Number,
     default: 0,
   },
+  date: {
+    type: Date,
+    default: Date.now(),
+  },
   image: {
     type: String,
   },
