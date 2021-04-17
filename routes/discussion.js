@@ -2,6 +2,7 @@ const express = require("express");
 const parser = require("../config/cloudinary");
 const router = express.Router();
 const isLoggedIn = require("../middlewares/isLoggedIn");
+const isMember = require("../middlewares/isMember");
 const User = require("../models/User.model");
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
@@ -9,19 +10,24 @@ const Comment = require("../models/Comment.model");
 
 // LINK FROM "START A CONVERSATION" BUTTON
 // Finds correct community and passes it with req-params and slug
-router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
-  Community.findOne({ slug: req.params.dynamicCommunity }).then(
-    (singleCommunity) => {
-      if (!singleCommunity) {
-        return res.redirect("/");
+router.get(
+  "/:dynamicCommunity/new-discussion",
+  isLoggedIn,
+  // isMember,
+  (req, res) => {
+    Community.findOne({ slug: req.params.dynamicCommunity }).then(
+      (singleCommunity) => {
+        if (!singleCommunity) {
+          return res.redirect("/");
+        }
+        res.render("community/new-discussion", {
+          singleCommunity: singleCommunity,
+          user: req.session.user._id,
+        });
       }
-      res.render("community/new-discussion", {
-        singleCommunity: singleCommunity,
-        user: req.session.user._id,
-      });
-    }
-  );
-});
+    );
+  }
+);
 
 // CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
 router.post(
@@ -42,11 +48,10 @@ router.post(
     const image = req.file?.path;
 
     if (!title || !firstPost) {
-      res.render("community/new-discussion", {
+      return res.render("community/new-discussion", {
         errorMessage: "Please fill in both fields",
         user: req.session.user._id,
       });
-      return;
     }
     Discussion.findOne({ title })
       .populate("User")
