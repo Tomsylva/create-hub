@@ -28,7 +28,15 @@ router.post(
   "/:dynamicCommunity/new-discussion",
   isLoggedIn,
   parser.single("image"),
-  (req, res) => {
+  async (req, res) => {
+    // try {
+    //   req.firstPost.user = req.user._id;
+    //   console.log(req.firstPost);
+    //   const discussion = await Discussion.create(req.firstPost);
+    //   res.redirect("/:dynamicCommunity");
+    // } catch (err) {
+    //   console.log(err);
+    // }
     const dynamicCommunity = req.params.dynamicCommunity;
     const { title, firstPost } = req.body;
     const image = req.file?.path;
@@ -43,9 +51,9 @@ router.post(
     Discussion.findOne({ title })
       .populate("User")
       .then((found) => {
-        if (!found) {
-          return res.redirect("/");
-        }
+        // if (!found) {
+        //   return res.redirect("/");
+        // }
         if (found) {
           return res.render("community/new-discussion", {
             errorMessage: "Discussion already exists",

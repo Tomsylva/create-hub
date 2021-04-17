@@ -32,7 +32,11 @@ const userSchema = new Schema({
       ref: "Community",
     },
   ],
-  id: { type: String },
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const User = model("User", userSchema);
