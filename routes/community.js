@@ -54,7 +54,7 @@ router.post(
   (req, res) => {
     const dynamicCommunity = req.params.dynamicCommunity;
     const { title, firstPost } = req.body;
-    const image = req.file.path;
+    const image = req.file?.path;
     if (!title || !firstPost) {
       res.render("community/new-discussion", {
         errorMessage: "Please fill in both fields",
@@ -65,9 +65,6 @@ router.post(
     Discussion.findOne({ title })
       .populate("User")
       .then((found) => {
-        if (!found) {
-          return res.redirect("/");
-        }
         if (found) {
           return res.render("community/new-discussion", {
             errorMessage: "Discussion already exists",

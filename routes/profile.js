@@ -18,7 +18,7 @@ router.get("/edit", isLoggedIn, (req, res) => {
 
 router.post("/edit", isLoggedIn, parser.single("image"), (req, res) => {
   const { name, bio, interests } = req.body;
-  const userImage = req.file.path;
+  const userImage = req.file?.path;
 
   console.log("LOOK");
 
