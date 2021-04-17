@@ -9,11 +9,7 @@ const parser = require("../config/cloudinary");
 //let apidata;
 
 router.get("/", (req, res) => {
-<<<<<<< HEAD
-  res.render("community/community-home", { user: req.session.user });
-=======
   res.render("community/community-home", { user: req.session.user?._id });
->>>>>>> john-changes
 });
 
 // JOIN A COMMUNITY SPACE
