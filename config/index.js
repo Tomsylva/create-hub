@@ -25,11 +25,7 @@ const session = require("express-session");
 // https://www.npmjs.com/package/connect-mongo
 const MongoStore = require("connect-mongo");
 
-//passport for the google auth
-const passport = require("passport");
 const app = require("../app");
-// passport config
-require("./passport")(passport);
 
 // Middleware configuration
 module.exports = (app) => {
@@ -52,10 +48,6 @@ module.exports = (app) => {
   app.use(
     favicon(path.join(__dirname, "..", "public", "images", "favicon.ico"))
   );
-
-  //passport middleware
-  app.use(passport.initialize());
-  app.use(passport.session());
 
   // ℹ️ Middleware that adds a "req.session" information and later to check that you are who you say you are 😅
   app.use(

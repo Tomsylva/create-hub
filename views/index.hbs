@@ -1,4 +1,26 @@
-<h1>CREATE-Hub</h1>
+<div id="homepage-content">
+    <div class="half-left" id="home-left">
+        <img src="/images/CRE8-logo.png" alt="CREATE-Hub">
+    </div>
+    <div class="half-right" id="home-right"><img src="/images/pexels-zaksheuskaya-1579245.jpg" alt=""></div>
+</div>
 
-<p>I am thinking that my quick-ass logo is a bit lame, but it does bring me home when I click on it. A bit like ET...
-</p>
+<div id="homepage-bottom">
+    <p>Welcome to <strong>CREATE-Hub</strong>, a space for creative minds to connect and inspire each other</p>
+
+    {{#if user}}
+
+    <p>Hi there, <strong>{{user.name}}</strong></p>
+
+    {{else}}
+
+    <p>Feel free to look at our <a href="/community">communities</a>, and to <a href="/auth/signup">sign up</a> if you
+        want
+        to interract with them</p>
+
+    {{/if}}
+</div>
+
+<footer>
+    <p>An IronHack project by John & Tom</p>
+</footer>

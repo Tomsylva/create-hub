@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const passport = require("passport");
 // ℹ️ Handles password encryption
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
@@ -13,20 +12,6 @@ const User = require("../models/User.model");
 // Require necessary middlewares in order to control access to specific routes
 const shouldNotBeLoggedIn = require("../middlewares/shouldNotBeLoggedIn");
 const isLoggedIn = require("../middlewares/isLoggedIn");
-
-//    Auth with Google
-//    GET /auth/google
-router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-
-//     Google auth callback
-//   GET /auth/google/callback
-router.get(
-  "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/auth/login" }),
-  (req, res) => {
-    res.redirect("/");
-  }
-);
 
 router.get("/signup", shouldNotBeLoggedIn, (req, res) => {
   res.render("auth/signup");
@@ -60,7 +45,9 @@ router.post("/signup", shouldNotBeLoggedIn, (req, res) => {
   */
 
   // Search the database for a user with the username submitted in the form
-  User.findOne({ $or: [{ username }, { email }] }).then((found) => {
+  User.findOne({
+    $or: [{ username }, { email }],
+  }).then((found) => {
     // If the user is found, send the message username is taken
     if (found) {
       return res

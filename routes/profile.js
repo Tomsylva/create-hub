@@ -1,53 +1,49 @@
 const express = require("express");
 const parser = require("../config/cloudinary");
 const router = express.Router();
-const login = require("../middlewares/isLoggedIn");
+const isLoggedIn = require("../middlewares/isLoggedIn");
 const User = require("../models/User.model");
-const passport = require("passport");
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
 const Comment = require("../models/Comment.model");
 
-router.get(
-  "/google",
-  login,
-  passport.authenticate("google", { scope: ["profile"] })
-);
-router.get(
-  "/google/callback",
-  login,
-  passport.authenticate("google", { failureRedirect: "/" }),
-  (req, res) => {
-    res.redirect("/");
-  }
-);
-router.get("/", login, (req, res) => {
+router.get("/", isLoggedIn, (req, res) => {
   console.log("req.session.user", req.session.user);
   res.render("profile", { user: req.session.user });
 });
 
-router.get("/edit", login, (req, res) => {
+router.get("/edit", isLoggedIn, (req, res) => {
   res.render("edit-profile", { user: req.session.user });
 });
 
-router.post("/edit", login, parser.single("image"), (req, res) => {
+router.post("/edit", isLoggedIn, parser.single("image"), (req, res) => {
   const { name, bio, interests } = req.body;
-  const userImage = req.file.path;
-  User.findByIdAndUpdate(
-    req.session.user._id,
-    { name, interests, bio, userImage },
-    { new: true }
-  ).then((newUser) => {
+  const userImage = req.file?.path;
+
+  console.log("LOOK");
+
+  const toClean = { name, bio, interests, userImage }; // {name:" sakdjfhsadkjfhsa", bio:"aksjdfhasdkfjh", userImage: "12340298"}
+
+  const updater = Object.fromEntries(
+    Object.entries(toClean).filter((el) => el[1]) //filter out everything that doesnt have a first position truthy
+  );
+
+  const beforeObjectUpdater = { name, interests, bio, userImage };
+  User.findByIdAndUpdate(req.session.user._id, updater, {
+    new: true,
+  }).then((newUser) => {
     console.log("newUser:", newUser);
     req.session.user = newUser;
     res.redirect("/profile");
   });
 });
-router.get("/delete", login, async (req, res) => {
+router.get("/delete", isLoggedIn, async (req, res) => {
   const userId = req.session.user._id;
 
   // Delete the user document in the users collection
   await User.findByIdAndDelete(userId);
+
+  console.log("HERE");
 
   // list all of the users communities -> needs to be checked whenever you merge code with tom
   const allUserCommunities = await Community.find({
@@ -57,7 +53,7 @@ router.get("/delete", login, async (req, res) => {
   // assuming the code above is correct, this edits ALL of the communities removing the user
   const updatedCommunities = allUserCommunities.map((community) => {
     return Community.findByIdAndUpdate(community._id, {
-      $pop: { members: userId },
+      $pull: { members: userId },
     });
   });
   // making sure every promise runes
@@ -85,20 +81,5 @@ router.get("/delete", login, async (req, res) => {
   //   const deleteAllPromises = allUserComments.map(el => Comment.findByIdAndDelete(el._id))
   // await Promise.all(deleteAllPromises)
 });
-// router.get("/:dynamic/delete"),
-//   login,
-//   (req, res) => {
-//     User.findById(req.params.dynamic)
-//       // .populate("user")
-//       .then((user) => {
-//         if (!user) {
-//           return res.redirect("/");
-//         }
-//         // if (!user.includes(req.session.user._id)) {
-//         //   return res.redirect("/");
-//         // }
-//         User.findByIdAndDelete(user._id).then(() => {});
-//       });
-//   };
 
 module.exports = router;

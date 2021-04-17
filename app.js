@@ -34,6 +34,9 @@ app.use("/auth", authRoutes);
 const communityRoutes = require("./routes/community");
 app.use("/community", communityRoutes);
 
+const discussionRoutes = require("./routes/discussion");
+app.use("/community", discussionRoutes);
+
 const profileRoutes = require("./routes/profile");
 app.use("/profile", profileRoutes);
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes

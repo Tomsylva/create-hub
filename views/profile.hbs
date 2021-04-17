@@ -1,14 +1,16 @@
 {{#with user}}
-<img src="{{userImage}}">
 
-<a href="/profile/edit">Edit your profile</a>
-{{#if bio}}
-<p>{{name}}</p>
-
-<p>{{bio}}</p>
-<p>{{interests}}</p>
-
-<ul>{{community}}</ul>
-{{/if}}
-<a href="/profile/delete">Delete Profile</a>
-{{/with}}
+<div id="profile-info">
+    <h2 id="user-name">Welcome to your profile, <span>{{name}}</span></h2>
+    <div id="edit-profile-links">
+        <a href="/profile/edit">Edit your profile</a><a href="/profile/delete">Delete Profile</a>
+    </div>
+    {{#if userImage}}
+    <img src="{{userImage}}" id="user-image">
+    <br>
+    {{/if}}
+    {{#if bio}}
+    <p id="user-bio">{{bio}}</p>
+    {{/if}}
+    {{/with}}
+</div>

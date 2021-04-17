@@ -1,11 +1,17 @@
-<h1>{{discussion.title}}</h1>
-<p>{{discussion.firstPost}}</p>
+<h1 class="community-title">{{discussion.title}}</h1>
+<p id="discussion-description">{{discussion.firstPost}}</p>
 
-<a href="/community/{{community.slug}}">Back to {{community.name}} community</a>
+<a href="/community/{{community.slug}}" class="back-button">Back to {{community.name}} community</a>
 
-<h3>Leave a comment</h3>
-<form action="/community/{{community.slug}}/discussion/{{discussion._id}}/comment" method="POST">
-    <input type="text" name="title" placeholder="Title">
-    <input type="text" name="text" placeholder="Text">
-    <button type="submit">Comment</button>
-</form>
+<h3 class="community-title">Leave a comment</h3>
+
+<div class="basic-form">
+    <form action="/community/{{community.slug}}/discussion/{{discussion._id}}/comment" method="POST"
+        enctype="multipart/form-data" class="select-form">
+        <input type="text" name="title" placeholder="Title" class="basic-input">
+        <input type="text" name="text" placeholder="Text" class="basic-input">
+        <label for="image">Upload file</label>
+        <input type="file" name="image" class="file-input">
+        <button type="submit" class="basic-button">Comment</button>
+    </form>
+</div>

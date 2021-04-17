@@ -5,15 +5,16 @@ const Discussion = require("../models/Discussion.model");
 const isLoggedIn = require("../middlewares/isLoggedIn");
 const apiURL = `http://api.mediastack.com/v1/news?access_key=${process.env.NEWS_API_KEY}`;
 const axios = require("axios");
-
+const parser = require("../config/cloudinary");
 //let apidata;
 
 router.get("/", (req, res) => {
-  res.render("community/community-home", { user: req.session.user._id });
+  res.render("community/community-home", { user: req.session.user?._id });
 });
 
 // JOIN A COMMUNITY SPACE
 router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
+  const member = await Community.find({ members: req.session.user._id });
   const singleCommunity = await Community.findOneAndUpdate(
     {
       slug: req.params.dynamicCommunity,
@@ -25,90 +26,11 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
     $addToSet: { interests: singleCommunity._id },
   });
   res.render("community/community-joined", {
+    members: member,
     activeSlug: req.params.dynamicCommunity,
     user: req.session.user._id,
   });
 });
-
-// LINK FROM "START A CONVERSATION" BUTTON
-// Finds correct community and passes it with req-params and slug
-router.get("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
-  Community.findOne({ slug: req.params.dynamicCommunity }).then(
-    (singleCommunity) => {
-      if (!singleCommunity) {
-        return res.redirect("/");
-      }
-      res.render("community/new-discussion", {
-        singleCommunity: singleCommunity,
-        user: req.session.user._id,
-      });
-    }
-  );
-});
-
-// CREATES A NEW DISCUSSION IF ONE DOESN'T EXIST
-router.post("/:dynamicCommunity/new-discussion", isLoggedIn, (req, res) => {
-  const dynamicCommunity = req.params.dynamicCommunity;
-  const { title, firstPost } = req.body;
-  if (!title || !firstPost) {
-    res.render("community/new-discussion", {
-      errorMessage: "Please fill in both fields",
-      user: req.session.user._id,
-    });
-    return;
-  }
-  Discussion.findOne({ title }).then((found) => {
-    if (found) {
-      return res.render("community/new-discussion", {
-        errorMessage: "Discussion already exists",
-        user: req.session.user._id,
-      });
-    }
-    Discussion.create({
-      title,
-      firstPost,
-      createdBy: req.session.user._id,
-    })
-      .then((createdDiscussion) => {
-        console.log("Amazing! Created discussion", createdDiscussion);
-        Community.findOneAndUpdate(
-          { slug: dynamicCommunity },
-          { $addToSet: { discussionTopics: createdDiscussion._id } },
-          { new: true }
-        ).then((updatedCommunity) => {
-          console.log("Updated comunnity", updatedCommunity);
-          res.redirect(`/community/${req.params.dynamicCommunity}`);
-        });
-      })
-      .catch((err) => {
-        console.log("Sad times :(", err);
-        res.render("community/new-discussion", {
-          errorMessage: "Something went wrong",
-          user: req.session.user._id,
-        });
-      });
-  });
-});
-
-// LOADS DISCUSSION PAGE DYNAMICALLY - not yet working
-router.get(
-  "/:dynamicCommunity/discussion/:dynamicDiscussion",
-  isLoggedIn,
-  (req, res) => {
-    Community.findOne({ slug: req.params.dynamicCommunity })
-      .populate("discussionTopics")
-      .then((singleCommunity) => {
-        Discussion.findOne({ _id: req.params.dynamicDiscussion }).then(
-          (singleDiscussion) => {
-            res.render("community/discussion", {
-              community: singleCommunity,
-              discussion: singleDiscussion,
-            });
-          }
-        );
-      });
-  }
-);
 
 // MAKING COMMENTS - not yet working
 // router.post(
@@ -150,7 +72,7 @@ router.get("/:dynamicCommunity", (req, res) => {
         res.render("community/single-community", {
           singleCommunity: singleCommunity,
           apidata: apidata,
-          user: req.session.user._id,
+          user: req.session.user,
           discussions: discussions,
         });
       });

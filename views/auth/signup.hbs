@@ -1,24 +1,14 @@
-<div class="container login-container">
-   <div class="card">
-      <div class="card-content">
-         <form action="/auth/signup" method="POST">
-            <label>Full name<input type="text" name="name" placeholder="Name" required></label>
-            <label>Email <input type="email" name="email" required placeholder="@" required></label>
-            <label> Username
-               <input type="text" name="username" required>
-            </label>
-            <label> Password
-               <input type="password" name="password" required>
-            </label>
+<div class="basic-form">
+   <form action="/auth/signup" method="POST" class="select-form">
+      <input type="text" name="name" placeholder="Name" class="basic-input" required>
+      <br>
+      <input type="email" name="email" placeholder="Email" class="basic-input" required>
+      <br>
+      <input type="text" name="username" placeholder="Username" class="basic-input" required>
+      <br>
+      <input type="password" name="password" placeholder="Password" class="basic-input" required>
+      <br>
+      <button type="submit" class="basic-button">Sign Up</button>
+   </form>
 
-            <button type="submit">Sign Up</button>
-         </form>
-         <div class="divider"></div>
-         <div class="section">
-            <a href="/auth/google" class="btn red darken-1">
-               <i class="fab fa-google left"></i> Sign up With Google
-            </a>
-         </div>
-      </div>
-   </div>
 </div>
