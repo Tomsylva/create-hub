@@ -15,6 +15,12 @@ const communitySchema = new Schema({
     required: true,
   },
   members: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  createdBy: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   slug: {
     type: String,
   },

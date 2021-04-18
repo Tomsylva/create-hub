@@ -59,25 +59,46 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
 
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
 // Each community can be viewed by anybody not signed in
-router.get("/:dynamicCommunity", (req, res) => {
-  Community.findOne({ slug: req.params.dynamicCommunity })
-    .populate("discussionTopics")
-    .then((singleCommunity) => {
-      if (!singleCommunity) {
-        return res.redirect("/");
-      }
-      let keyword = singleCommunity.keyword;
-      let discussions = singleCommunity.discussionTopics;
-      getNewsStories(keyword).then((apidata) => {
-        res.render("community/single-community", {
-          singleCommunity: singleCommunity,
-          apidata: apidata,
-          user: req.session.user,
-          discussions: discussions,
-        });
-      });
+router.get("/:dynamicCommunity", async (req, res) => {
+  // const topic = await Community.findById(req.params.dynamicCommunity)
+  //   .populate("createdBy")
+  //   .populate("members");
+  // if (!topic) {
+  //   return res.redirect("/");
+  // }
+  // let isCreator = false;
+
+  // console.log("req.session", req.session);
+  // if (req.session.user) {
+  //   if (topic.createdBy.username === req.session.user.username) {
+  //     isCreator = true;
+  //   }
+  // }
+  // res.render("community/single-community", {
+  //   community: topic,
+  //   isCreator,
+  // });
+
+  const singleCommunity = await Community.findOne({
+    slug: req.params.dynamicCommunity,
+  }).populate("discussionTopics");
+
+  if (!singleCommunity) {
+    return res.redirect("/");
+  }
+  let keyword = singleCommunity.keyword;
+  let discussions = singleCommunity.discussionTopics;
+  getNewsStories(keyword).then((apidata) => {
+    res.render("community/single-community", {
+      singleCommunity: singleCommunity,
+      apidata: apidata,
+      user: req.session.user.name,
+      discussions: discussions,
     });
+  });
 });
+
+//});
 
 function getNewsStories(keyword) {
   return axios
