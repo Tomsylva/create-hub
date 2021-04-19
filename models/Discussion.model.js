@@ -14,6 +14,7 @@ const discussionSchema = new Schema({
     type: String,
     required: true,
   },
+  members: [{ type: Schema.Types.ObjectId, ref: "User" }],
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   numberOfComments: {
     type: Number,

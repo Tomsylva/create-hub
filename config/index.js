@@ -25,6 +25,9 @@ const session = require("express-session");
 // https://www.npmjs.com/package/connect-mongo
 const MongoStore = require("connect-mongo");
 
+//Importing method-override module to perform PUT & DELETE
+const methodOverride = require("method-override");
+
 const app = require("../app");
 
 // Middleware configuration
@@ -47,6 +50,17 @@ module.exports = (app) => {
   // Handles access to the favicon
   app.use(
     favicon(path.join(__dirname, "..", "public", "images", "favicon.ico"))
+  );
+
+  //Middleware for the methodOverride
+  app.use(
+    methodOverride(function (req, res) {
+      if (req.body && typeof req.body === "object" && "_method" in req.body) {
+        let method = req.body._method;
+        delete req.body._method;
+        return method;
+      }
+    })
   );
 
   // ℹ️ Middleware that adds a "req.session" information and later to check that you are who you say you are 😅
