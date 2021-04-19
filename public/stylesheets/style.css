@@ -272,13 +272,13 @@ footer p {
   padding: 15px;
   border-radius: 7px;
   border: 1px solid #797979;
-  opacity: 0.5;
   color: #797979;
 }
 
 .basic-button:hover {
-  opacity: 1;
-  transition: opacity 0.5s;
+  background-color: #216b37;
+  color: white;
+  transition: background-color 0.5s, color 0.5s;
 }
 
 .select-form {
