@@ -1,6 +1,7 @@
 {{#with discussion}}
 <div class="basic-form">
-  <form action="/community/{{discussion._id}}/edit-discussion" method="POST" enctype="multipart/form-data">
+  <form action="/community/{{discussion._id}}/edit-discussion" method="POST" enctype="multipart/form-data"
+    class="select-form">
 
 
     <label for="title" class="basic-label">Topic</label>
@@ -9,9 +10,9 @@
     <label for="firstPost" class="basic-label">Post</label>
     <input name="firstPost" value="{{firstPost}}" class="basic-input">
     <br>
-    <label for="image" class="basic-label">image</label>
+    <label for="image" class="basic-label">Image</label>
     <input type="file" name="image" id="file" class="file-input">
-
+    <br>
     <button type="submit" class="basic-button">Submit Changes</button>
 
   </form>

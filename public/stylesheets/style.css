@@ -55,7 +55,9 @@ nav li a {
   border-radius: 15px;
 }
 
-nav li a:hover {
+nav li a:hover,
+.basic-discussion a:hover,
+.back-button:hover {
   color: #273f2f;
   background-color: #4e805d4b;
   transition: color 0.5s, background-color 1s;
@@ -305,6 +307,20 @@ footer p {
 .discussion-description,
 .back-button {
   text-align: center;
+}
+
+.basic-discussion {
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  margin: 10px 50px;
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.basic-discussion a,
+.back-button {
+  padding: 10px 5px;
+  border-radius: 7px;
 }
 
 /*# sourceMappingURL=style.css.map */

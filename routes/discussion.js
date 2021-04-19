@@ -15,17 +15,20 @@ router.get(
   isLoggedIn,
   // isMember,
   (req, res) => {
-    Community.findOne({ slug: req.params.dynamicCommunity }).then(
-      (singleCommunity) => {
+    Community.findOne({ slug: req.params.dynamicCommunity })
+      .populate("members")
+      .then((singleCommunity) => {
         if (!singleCommunity) {
           return res.redirect("/");
         }
+        // if (/* USER ID IS NOT IN ARRAY OF MEMBERS */){
+        //   res.redirect(`/${req.params.dynamicCommunity}`)
+        // }
         res.render("community/new-discussion", {
           singleCommunity: singleCommunity,
           user: req.session.user._id,
         });
-      }
-    );
+      });
   }
 );
 
