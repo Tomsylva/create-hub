@@ -92,7 +92,7 @@ router.get("/:dynamicCommunity", async (req, res) => {
     res.render("community/single-community", {
       singleCommunity: singleCommunity,
       apidata: apidata,
-      user: req.session.user.name,
+      user: req.session.user?.name,
       discussions: discussions,
     });
   });
