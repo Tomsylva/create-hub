@@ -93,25 +93,60 @@ router.get(
             res.render("community/discussion", {
               community: singleCommunity,
               discussion: singleDiscussion,
+              user: req.session.user,
             });
           }
         );
       });
   }
 );
+// function discussionExistMiddleware(req, res, next) {
+//   Discussion.findById(req.params.dynamicCommunity)
+//     .populate("creadtedBy")
+//     .populate("members")
+//     .then((foundDiscussion) => {
+//       if (!foundDiscussion) {
+//         return res.redirect("/profile");
+//       }
+//       req.discussion = foundDiscussion;
+
+//       next();
+//     });
+// }
+
 //DYNAMIC EDIT THE DISCUSSION
 //the body is not being send to edit just yet, also the POST not properly working
-router.get("/:dynamicDiscussion/edit-discussion", isLoggedIn, (req, res) => {
-  res.render("community/edit-discussion", {
-    discussion: req.session.user._id,
-  });
-});
+router.get(
+  "/:dynamicDiscussion/edit-discussion",
+  isLoggedIn,
+  async (req, res) => {
+    try {
+      const discussion = await Discussion.findOne({
+        _id: req.params.dynamicDiscussion,
+      }).lean();
+      if (!discussion) {
+        return res.redirect("/");
+      }
+      if (discussion.user != req.user.id) {
+        res.redirect("/community");
+      } else {
+        res.render("community/edit-discussion", {
+          discussion,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
 router.post(
   "/:dynamicDiscussion/edit-discussion",
   isLoggedIn,
   parser.single("image"),
-  (req, res) => {
+  async (req, res) => {
+    console.log("LOOOK HERE MY FRIEND", req.params.dynamicDiscussion);
+    await Discussion.findById(req.params.dynamicDiscussion);
     const { title, firstPost } = req.body;
     const image = req.file?.path;
 
@@ -123,9 +158,13 @@ router.post(
       Object.entries(toClean).filter((el) => el[1])
     );
 
-    Discussion.findByIdAndUpdate(req.session.user._id, updateDiscussion, {
-      new: true,
-    }).then((newDiscu) => {
+    await Discussion.findByIdAndUpdate(
+      req.params.dynamicDiscussion,
+      updateDiscussion,
+      {
+        new: true,
+      }
+    ).then((newDiscu) => {
       console.log("newDiscu", newDiscu);
       req.session.discussion = newDiscu;
       res.redirect("/community");
@@ -169,3 +208,24 @@ router.get("/:dynamicDiscussion/delete", isLoggedIn, async (req, res) => {
 });
 
 module.exports = router;
+
+// try {
+//   let discussion = await Discussion.findById(
+//     req.params.dynamicDiscussion
+//   ).lean();
+
+//   if (discussion.user != req.user.id) {
+//     return res.redirect("/");
+//   } else {
+//     discussion = await Discussion.findOneAndUpdate(
+//       { _id: req.params.dynamicDiscussion },
+//       req.body,
+//       {
+//         new: true,
+//       }
+//     );
+//     return res.redirect("/community");
+//   }
+// } catch (err) {
+//   console.log(err);
+// }
