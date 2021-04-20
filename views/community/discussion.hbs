@@ -2,17 +2,16 @@
 
 <div class="basic-discussion">
     <p id="discussion-description">{{discussion.firstPost}}</p>
-    {{!-- {{#if isCreator}} --}}
     <a href="/community/{{discussion._id}}/edit-discussion">Edit topic</a>
     <a href="/community/{{discussion._id}}/delete">Delete Topic</a>
-    {{!-- {{/if}} --}}
 </div>
-
-
-{{!-- {{#with isMember}} --}}
+{{#each discussion.comments}}
+<div class="basic-comments">
+    <p>{{this}}</p>
+</div>
+{{/each}}
 <div class="basic-form">
-    <form action="/community/{{community.slug}}/discussion/{{discussion._id}}/comment" method="POST"
-        enctype="multipart/form-data" class="select-form">
+    <form action="/community/{{community.slug}}/discussion/{{discussion._id}}" method="POST" class="select-form">
 
         <input type="text" name="text" placeholder="Comment" class="basic-input">
 
