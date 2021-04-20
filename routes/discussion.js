@@ -13,7 +13,7 @@ const Comment = require("../models/Comment.model");
 router.get(
   "/:dynamicCommunity/new-discussion",
   isLoggedIn,
-  // isMember,
+  isMember,
   (req, res) => {
     Community.findOne({ slug: req.params.dynamicCommunity })
       .populate("members")
