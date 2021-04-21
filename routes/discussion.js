@@ -97,6 +97,7 @@ router.get(
   (req, res) => {
     Community.findOne({ slug: req.params.dynamicCommunity })
       .populate("discussionTopics")
+      .populate("comments")
       .then((singleCommunity) => {
         Discussion.findOne({ _id: req.params.dynamicDiscussion }).then(
           (singleDiscussion) => {
@@ -104,6 +105,7 @@ router.get(
               community: singleCommunity,
               discussion: singleDiscussion,
               user: req.session.user,
+              comments: singleCommunity.comments,
             });
           }
         );

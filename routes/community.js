@@ -6,6 +6,8 @@ const isLoggedIn = require("../middlewares/isLoggedIn");
 const apiURL = `http://api.mediastack.com/v1/news?access_key=${process.env.NEWS_API_KEY}`;
 const axios = require("axios");
 const parser = require("../config/cloudinary");
+const Comment = require("../models/Comment.model");
+const isMember = require("../middlewares/isMember");
 //let apidata;
 
 router.get("/", (req, res) => {
@@ -31,6 +33,39 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
     user: req.session.user._id,
   });
 });
+
+//COMMENTS, COMMENTS, COMMENTS!!!
+router.post(
+  "/:dynamicCommunity/discussion/:dynamicDiscussion",
+  isLoggedIn,
+  isMember,
+  async (req, res) => {
+    try {
+      const { text } = req.body;
+      const community = await Community.findOne({
+        slug: req.params.dynamicCommunity,
+      }).populate("discussionTopics");
+      const discussion = await Discussion.findById(
+        req.params.dynamicDiscussion
+      );
+
+      const createdComment = await Comment.create({
+        text,
+        createdBy: req.session.user._id,
+      });
+      await Discussion.findByIdAndUpdate(
+        req.params.dynamicDiscussion,
+        { $addToSet: { comments: createdComment._id } },
+        { new: true }
+      );
+      return res.redirect(
+        `/community/${community.slug}/discussion/${discussion._id}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
 // MAKING COMMENTS - not yet working
 // router.post(
