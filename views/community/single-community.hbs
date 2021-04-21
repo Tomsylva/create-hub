@@ -1,11 +1,17 @@
 {{#if singleCommunity.image}}
-<img src="{{singleCommunity.image}}" alt="image not found">
+<img src="{{singleCommunity.image}}" alt="image not found" class="community-image">
 {{/if}}
 <h1 class="community-title">Welcome to our {{singleCommunity.name}} Community</h1>
 <p id="about-community">{{singleCommunity.about}}</p>
 
-<a href="/community/{{singleCommunity.slug}}/join" id="join-community-button">Join this community</a>
+{{!-- {{#if isCommunityMember}}
+<p>SUCCESS</p>
+{{else}} --}}
+<div id="join-community-div">
+    <a href="/community/{{singleCommunity.slug}}/join" id="join-community-button">Join this community</a>
+</div>
 
+{{!-- {{/if}} --}}
 <div id="community-body">
     <div id="discussion-panel">
         <h2>{{singleCommunity.name}} Discussions</h2>
