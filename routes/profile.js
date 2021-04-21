@@ -7,7 +7,7 @@ const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
 const Comment = require("../models/Comment.model");
 
-router.get("/", isLoggedIn, (req, res) => {
+router.get("/", isLoggedIn, async (req, res) => {
   console.log("req.session.user", req.session.user);
   res.render("profile", { user: req.session.user });
 });

@@ -142,6 +142,7 @@ router.get(
       } else {
         res.render("community/edit-discussion", {
           discussion,
+          user: req.session.user,
         });
       }
     } catch (err) {
@@ -177,7 +178,7 @@ router.post(
     ).then((newDiscu) => {
       console.log("newDiscu", newDiscu);
       req.session.discussion = newDiscu;
-      res.redirect("/community");
+      res.redirect(`/community/${req.params.dynamicCommunity}`);
     });
   }
 );
