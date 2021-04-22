@@ -8,10 +8,14 @@
         <h2>{{singleCommunity.name}} Discussions</h2>
         <a href="/community/{{singleCommunity.slug}}/new-discussion">Start a conversation</a>
         {{#each discussions}}
+
         <div class="discussion-block">
             <h4><a href="/community/{{../singleCommunity.slug}}/discussion/{{this._id}}">{{this.title}}</a></h4>
             <p>{{this.firstPost}}</p>
             <img src="{{this.image}}" width="100px">
+            <p>{{this.createdBy}}</p>
+            <p>{{date}}</p>
+
         </div>
         {{/each}}
     </div>

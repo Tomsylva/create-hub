@@ -2,15 +2,18 @@
 
 <div class="basic-discussion">
     <p id="discussion-description">{{discussion.firstPost}}</p>
+    {{#if image}}
     <img src="{{discussion.image}}" width="200px" height="200px">
-
+    {{/if}}
     <a href="/community/{{discussion._id}}/edit-discussion">Edit topic</a>
     <a href="/community/{{discussion._id}}/delete">Delete Topic</a>
+    <p>{{discussion.createdBy.username}}</p>
 </div>
 
-{{#each discussion.comments}}
+{{#each comments}}
 <div class="basic-comments">
-    <p>{{this}}</p>
+    <p>{{this.text}}</p>
+    {{!-- <h1>Hello</h1> --}}
 </div>
 {{/each}}
 <div class="basic-form">
