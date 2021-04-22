@@ -6,7 +6,10 @@ const isLoggedIn = require("../middlewares/isLoggedIn");
 const apiURL = `http://api.mediastack.com/v1/news?access_key=${process.env.NEWS_API_KEY}`;
 const axios = require("axios");
 const parser = require("../config/cloudinary");
+const Comment = require("../models/Comment.model");
+const isMember = require("../middlewares/isMember");
 //let apidata;
+const moment = require("moment");
 
 router.get("/", (req, res) => {
   res.render("community/community-home", { user: req.session.user?._id });
@@ -32,52 +35,96 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
   });
 });
 
-// MAKING COMMENTS - not yet working
-// router.post(
-//   "/:dynamicCommunity/discussion/:dynamicDiscussion/comment",
-//   isLoggedIn,
-//   (req, res) => {
-//     Community.findOne({ slug: req.params.dynamicCommunity })
-//       .populate("discussionTopics")
-//       .then((singleCommunity) => {
-//         Discussion.findById(req.params.dynamicDiscussion).then(
-//           (singleDiscussion) => {
-//             const { title, text } = req.body;
-//             Comment.create({
-//               title,
-//               text,
-//               createdBy: req.session.user._id,
-//             }).then((newComment) => {
-//               console.log(newComment);
-//               res.redirect(`/community/${singleCommunity.slug}`);
-//             });
-//           }
-//         );
-//       });
-//   }
-// );
+//COMMENTS, COMMENTS, COMMENTS!!!
+router.post(
+  "/:dynamicCommunity/discussion/:dynamicDiscussion",
+  isLoggedIn,
+  isMember,
+  async (req, res) => {
+    try {
+      const { text } = req.body;
+      const community = await Community.findOne({
+        slug: req.params.dynamicCommunity,
+      })
+        .populate("discussionTopics")
+        .populate("createdBy");
+      const discussion = await Discussion.findById(
+        req.params.dynamicDiscussion
+      );
+
+      const createdComment = await Comment.create({
+        text,
+        createdBy: req.session.user._id,
+      });
+      await Discussion.findByIdAndUpdate(
+        req.params.dynamicDiscussion,
+        { $addToSet: { comments: createdComment._id } },
+        { new: true }
+      );
+      return res.redirect(
+        `/community/${community.slug}/discussion/${discussion._id}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
 // Each community can be viewed by anybody not signed in
-router.get("/:dynamicCommunity", (req, res) => {
-  Community.findOne({ slug: req.params.dynamicCommunity })
+router.get("/:dynamicCommunity", async (req, res) => {
+  // const topic = await Community.findById(req.params.dynamicCommunity)
+  //   .populate("createdBy")
+  //   .populate("members");
+  // if (!topic) {
+  //   return res.redirect("/");
+  // }
+  // let isCreator = false;
+
+  // console.log("req.session", req.session);
+  // if (req.session.user) {
+  //   if (topic.createdBy.username === req.session.user.username) {
+  //     isCreator = true;
+  //   }
+  // }
+  // res.render("community/single-community", {
+  //   community: topic,
+  //   isCreator,
+  // });
+
+  const singleCommunity = await Community.findOne({
+    slug: req.params.dynamicCommunity,
+  })
     .populate("discussionTopics")
-    .then((singleCommunity) => {
-      if (!singleCommunity) {
-        return res.redirect("/");
-      }
-      let keyword = singleCommunity.keyword;
-      let discussions = singleCommunity.discussionTopics;
-      getNewsStories(keyword).then((apidata) => {
-        res.render("community/single-community", {
-          singleCommunity: singleCommunity,
-          apidata: apidata,
-          user: req.session.user,
-          discussions: discussions,
-        });
-      });
+    .populate("members");
+  // const isCommunityMember = await singleCommunity.members.includes(
+  //   req.session.user._id
+  // );
+
+  if (!singleCommunity) {
+    return res.redirect("/");
+  }
+  let keyword = singleCommunity.keyword;
+
+  let discussions = singleCommunity.discussionTopics.map((e) => {
+    return {
+      ...e.toJSON(), // in normal JS this does not exist. .toJSON exists in mongoose documentes.
+      date: moment(e.date).format("MMMM Do YYYY, h:mm:ss a"),
+    };
+  });
+
+  getNewsStories(keyword).then((apidata) => {
+    res.render("community/single-community", {
+      singleCommunity: singleCommunity,
+      apidata: apidata,
+      user: req.session.user?.name,
+      discussions: discussions,
+      // isCommunityMember: isCommunityMember,
     });
+  });
 });
+
+//});
 
 function getNewsStories(keyword) {
   return axios

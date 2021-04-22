@@ -55,7 +55,9 @@ nav li a {
   border-radius: 15px;
 }
 
-nav li a:hover {
+nav li a:hover,
+.basic-discussion a:hover,
+.back-button:hover {
   color: #273f2f;
   background-color: #4e805d4b;
   transition: color 0.5s, background-color 1s;
@@ -112,9 +114,22 @@ nav li a:hover {
   transition: background-color 0.5s;
 }
 
+#join-community-div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0 0 50px 0;
+}
+
 #about-community {
   padding: 15px;
   text-align: center;
+}
+
+.community-image {
+  width: 100%;
+  height: auto;
 }
 
 /* HOMEPAGE STYLING */
@@ -251,6 +266,7 @@ footer p {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  line-clamp: 3;
 }
 
 .basic-input {
@@ -267,18 +283,22 @@ footer p {
   transition: opacity 0.5s;
 }
 
+.basic-input:focus {
+  opacity: 1;
+}
+
 .basic-button {
   margin: 15px;
   padding: 15px;
   border-radius: 7px;
   border: 1px solid #797979;
-  opacity: 0.5;
   color: #797979;
 }
 
 .basic-button:hover {
-  opacity: 1;
-  transition: opacity 0.5s;
+  background-color: #216b37;
+  color: white;
+  transition: background-color 0.5s, color 0.5s;
 }
 
 .select-form {
@@ -305,6 +325,44 @@ footer p {
 .discussion-description,
 .back-button {
   text-align: center;
+}
+
+.basic-discussion {
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  margin: 10px 50px;
+  padding: 30px 100px;
+  border-radius: 15px;
+}
+
+.basic-discussion a,
+.back-button {
+  padding: 10px 5px;
+  border-radius: 7px;
+}
+
+.basic-comments {
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  margin: 10px 50px;
+  padding: 10px;
+  border-radius: 15px;
+  color: rgb(80, 80, 80);
+}
+
+.basic-comments p {
+  padding: 10px 80px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(173, 173, 173, 0.5),
+    rgba(0, 0, 0, 0)
+  );
 }
 
 /*# sourceMappingURL=style.css.map */
