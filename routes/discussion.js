@@ -1,8 +1,12 @@
+//CONFIG
 const express = require("express");
 const parser = require("../config/cloudinary");
 const router = express.Router();
+//MIDDLEWARES
 const isLoggedIn = require("../middlewares/isLoggedIn");
 const isMember = require("../middlewares/isMember");
+const isOwner = require("../middlewares/isOwner");
+//MODELS
 const User = require("../models/User.model");
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
@@ -36,6 +40,7 @@ router.get(
 router.post(
   "/:dynamicCommunity/new-discussion",
   isLoggedIn,
+  isMember,
   parser.single("image"),
   (req, res) => {
     const dynamicCommunity = req.params.dynamicCommunity;
@@ -52,9 +57,6 @@ router.post(
       .populate("User")
       .populate("date")
       .then((found) => {
-        // if (!found) {
-        //   return res.redirect("/");
-        // }
         if (found) {
           return res.render("community/new-discussion", {
             errorMessage: "Discussion already exists",
@@ -131,6 +133,8 @@ router.get(
 router.get(
   "/:dynamicDiscussion/edit-discussion",
   isLoggedIn,
+  // isMember,
+  isOwner,
   async (req, res) => {
     try {
       const discussion = await Discussion.findOne({
@@ -156,6 +160,8 @@ router.get(
 router.post(
   "/:dynamicDiscussion/edit-discussion",
   isLoggedIn,
+  // isMember,
+  isOwner,
   parser.single("image"),
   async (req, res) => {
     console.log("LOOOK HERE MY FRIEND", req.params.dynamicDiscussion);
@@ -186,39 +192,46 @@ router.post(
 );
 
 //DYNAMIC DELATE THE TOPIC
-router.get("/:dynamicDiscussion/delete", isLoggedIn, async (req, res) => {
-  try {
-    const deleteTopic = await Discussion.findById(
-      req.params.dynamicDiscussion
-    ).populate("createdBy");
+router.get(
+  "/:dynamicDiscussion/delete",
+  isLoggedIn,
+  // isMember,
+  isOwner,
+  async (req, res) => {
+    try {
+      const deleteTopic = await Discussion.findById(
+        req.params.dynamicDiscussion
+      ).populate("createdBy");
 
-    console.log(deleteTopic);
-    if (!deleteTopic) {
-      return res.redirect("/");
-    }
-    //ONLY THE CREATOR CAN DELETE
-    const isCreator =
-      deleteTopic.createdBy._id.toString() === req.session.user._id.toString();
-    if (!isCreator) {
-      return res.redirect("/");
-    }
-    Discussion.findByIdAndDelete(deleteTopic._id).then(() => {
-      Community.findOneAndUpdate(
-        { discussionTopics: { $in: deleteTopic._id } },
-        {
-          $pull: { topic: deleteTopic._id },
-        }
-      ).then((community) => {
-        // res.render / res.redirect cannot take dynamic values, like the params
-        // res.redirect(`/community/${a variable}`)
-        // return res.redirect("/community/:dynamicCommunity");
-        res.redirect(`/community/${community._id}`);
+      console.log(deleteTopic);
+      if (!deleteTopic) {
+        return res.redirect("/");
+      }
+      //ONLY THE CREATOR CAN DELETE
+      const isCreator =
+        deleteTopic.createdBy._id.toString() ===
+        req.session.user._id.toString();
+      if (!isCreator) {
+        return res.redirect("/");
+      }
+      Discussion.findByIdAndDelete(deleteTopic._id).then(() => {
+        Community.findOneAndUpdate(
+          { discussionTopics: { $in: deleteTopic._id } },
+          {
+            $pull: { topic: deleteTopic._id },
+          }
+        ).then((community) => {
+          // res.render / res.redirect cannot take dynamic values, like the params
+          // res.redirect(`/community/${a variable}`)
+          // return res.redirect("/community/:dynamicCommunity");
+          res.redirect(`/community/${community._id}`);
+        });
       });
-    });
-  } catch (err) {
-    console.log(err);
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
+);
 
 module.exports = router;
 

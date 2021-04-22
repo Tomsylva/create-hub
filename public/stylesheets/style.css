@@ -114,9 +114,22 @@ nav li a:hover,
   transition: background-color 0.5s;
 }
 
+#join-community-div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0 0 50px 0;
+}
+
 #about-community {
   padding: 15px;
   text-align: center;
+}
+
+.community-image {
+  width: 100%;
+  height: auto;
 }
 
 /* HOMEPAGE STYLING */
@@ -268,6 +281,10 @@ footer p {
 .basic-input:hover {
   opacity: 1;
   transition: opacity 0.5s;
+}
+
+.basic-input:focus {
+  opacity: 1;
 }
 
 .basic-button {

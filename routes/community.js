@@ -116,7 +116,12 @@ router.get("/:dynamicCommunity", async (req, res) => {
 
   const singleCommunity = await Community.findOne({
     slug: req.params.dynamicCommunity,
-  }).populate("discussionTopics");
+  })
+    .populate("discussionTopics")
+    .populate("members");
+  // const isCommunityMember = await singleCommunity.members.includes(
+  //   req.session.user._id
+  // );
 
   if (!singleCommunity) {
     return res.redirect("/");
@@ -129,6 +134,7 @@ router.get("/:dynamicCommunity", async (req, res) => {
       apidata: apidata,
       user: req.session.user?.name,
       discussions: discussions,
+      // isCommunityMember: isCommunityMember,
     });
   });
 });
