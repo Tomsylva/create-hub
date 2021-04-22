@@ -282,6 +282,10 @@ footer p {
   transition: opacity 0.5s;
 }
 
+.basic-input:focus {
+  opacity: 1;
+}
+
 .basic-button {
   margin: 15px;
   padding: 15px;
