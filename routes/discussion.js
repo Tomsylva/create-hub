@@ -99,37 +99,29 @@ router.get(
   (req, res) => {
     Community.findOne({ slug: req.params.dynamicCommunity })
       .populate("discussionTopics")
-      .populate("comments")
+
       .then((singleCommunity) => {
-        Discussion.findOne({ _id: req.params.dynamicDiscussion }).then(
-          (singleDiscussion) => {
+        Discussion.findOne({ _id: req.params.dynamicDiscussion })
+          .populate("createdBy")
+          .populate("members")
+          .populate("comments")
+          .then((singleDiscussion) => {
+            console.log(singleDiscussion.comments);
             res.render("community/discussion", {
               community: singleCommunity,
               discussion: singleDiscussion,
               user: req.session.user,
-              comments: singleCommunity.comments,
+              comments: singleDiscussion.comments,
+              createdBy: req.session.user._id,
+              members: req.session.user,
             });
-          }
-        );
+          });
       });
   }
 );
-// function discussionExistMiddleware(req, res, next) {
-//   Discussion.findById(req.params.dynamicCommunity)
-//     .populate("creadtedBy")
-//     .populate("members")
-//     .then((foundDiscussion) => {
-//       if (!foundDiscussion) {
-//         return res.redirect("/profile");
-//       }
-//       req.discussion = foundDiscussion;
-
-//       next();
-//     });
-// }
 
 //DYNAMIC EDIT THE DISCUSSION
-//the body is not being send to edit just yet, also the POST not properly working
+
 router.get(
   "/:dynamicDiscussion/edit-discussion",
   isLoggedIn,
@@ -234,24 +226,3 @@ router.get(
 );
 
 module.exports = router;
-
-// try {
-//   let discussion = await Discussion.findById(
-//     req.params.dynamicDiscussion
-//   ).lean();
-
-//   if (discussion.user != req.user.id) {
-//     return res.redirect("/");
-//   } else {
-//     discussion = await Discussion.findOneAndUpdate(
-//       { _id: req.params.dynamicDiscussion },
-//       req.body,
-//       {
-//         new: true,
-//       }
-//     );
-//     return res.redirect("/community");
-//   }
-// } catch (err) {
-//   console.log(err);
-// }
