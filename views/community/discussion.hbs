@@ -5,15 +5,19 @@
     {{#if image}}
     <img src="{{discussion.image}}" width="200px" height="200px">
     {{/if}}
-    <a href="/community/{{discussion._id}}/edit-discussion">Edit topic</a>
-    <a href="/community/{{discussion._id}}/delete">Delete Topic</a>
-    <p>{{discussion.createdBy.username}}</p>
+
+    <h3>{{discussion.createdBy.username}}</h3>
+    {{#if createdBy}}
+    <button class="basic-button"><a href="/community/{{discussion._id}}/edit-discussion">Edit topic</a></button>
+    <button class="basic-button"><a href="/community/{{discussion._id}}/delete">Delete Topic</a></button>
+    {{/if}}
 </div>
 
 {{#each comments}}
 <div class="basic-comments">
     <p>{{this.text}}</p>
-    {{!-- <h1>Hello</h1> --}}
+
+
 </div>
 {{/each}}
 <div class="basic-form">
@@ -28,5 +32,3 @@
 <div class="back-button">
     <a href="/community/{{community.slug}}">Back to {{community.name}} community</a>
 </div>
-
-{{!-- {{/with}} --}}

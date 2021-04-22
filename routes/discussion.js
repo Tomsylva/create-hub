@@ -46,7 +46,7 @@ router.post(
     const dynamicCommunity = req.params.dynamicCommunity;
     const { title, firstPost } = req.body;
     const image = req.file?.path;
-    const formattedTime = moment().format("MMMM Do YYYY, h:mm");
+
     if (!title || !firstPost) {
       return res.render("community/new-discussion", {
         errorMessage: "Please fill in both fields",
@@ -54,8 +54,7 @@ router.post(
       });
     }
     Discussion.findOne({ title })
-      .populate("User")
-      .populate("date")
+      .populate("createdBy")
       .then((found) => {
         if (found) {
           return res.render("community/new-discussion", {
@@ -63,12 +62,12 @@ router.post(
             user: req.session.user._id,
           });
         }
+
         Discussion.create({
           title,
           firstPost,
           image,
           createdBy: req.session.user._id,
-          formattedTime,
         })
           .then((createdDiscussion) => {
             console.log("Amazing! Created discussion", createdDiscussion);

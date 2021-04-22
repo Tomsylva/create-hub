@@ -9,6 +9,7 @@ const parser = require("../config/cloudinary");
 const Comment = require("../models/Comment.model");
 const isMember = require("../middlewares/isMember");
 //let apidata;
+const moment = require("moment");
 
 router.get("/", (req, res) => {
   res.render("community/community-home", { user: req.session.user?._id });
@@ -44,7 +45,9 @@ router.post(
       const { text } = req.body;
       const community = await Community.findOne({
         slug: req.params.dynamicCommunity,
-      }).populate("discussionTopics");
+      })
+        .populate("discussionTopics")
+        .populate("createdBy");
       const discussion = await Discussion.findById(
         req.params.dynamicDiscussion
       );
@@ -66,31 +69,6 @@ router.post(
     }
   }
 );
-
-// MAKING COMMENTS - not yet working
-// router.post(
-//   "/:dynamicCommunity/discussion/:dynamicDiscussion/comment",
-//   isLoggedIn,
-//   (req, res) => {
-//     Community.findOne({ slug: req.params.dynamicCommunity })
-//       .populate("discussionTopics")
-//       .then((singleCommunity) => {
-//         Discussion.findById(req.params.dynamicDiscussion).then(
-//           (singleDiscussion) => {
-//             const { title, text } = req.body;
-//             Comment.create({
-//               title,
-//               text,
-//               createdBy: req.session.user._id,
-//             }).then((newComment) => {
-//               console.log(newComment);
-//               res.redirect(`/community/${singleCommunity.slug}`);
-//             });
-//           }
-//         );
-//       });
-//   }
-// );
 
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
 // Each community can be viewed by anybody not signed in
@@ -127,7 +105,14 @@ router.get("/:dynamicCommunity", async (req, res) => {
     return res.redirect("/");
   }
   let keyword = singleCommunity.keyword;
-  let discussions = singleCommunity.discussionTopics;
+
+  let discussions = singleCommunity.discussionTopics.map((e) => {
+    return {
+      ...e.toJSON(), // in normal JS this does not exist. .toJSON exists in mongoose documentes.
+      date: moment(e.date).format("MMMM Do YYYY, h:mm:ss a"),
+    };
+  });
+
   getNewsStories(keyword).then((apidata) => {
     res.render("community/single-community", {
       singleCommunity: singleCommunity,
