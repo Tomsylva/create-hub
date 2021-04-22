@@ -331,7 +331,7 @@ footer p {
   text-align: center;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin: 10px 50px;
-  padding: 30px;
+  padding: 30px 100px;
   border-radius: 15px;
 }
 
@@ -339,6 +339,30 @@ footer p {
 .back-button {
   padding: 10px 5px;
   border-radius: 7px;
+}
+
+.basic-comments {
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  margin: 10px 50px;
+  padding: 10px;
+  border-radius: 15px;
+  color: rgb(80, 80, 80);
+}
+
+.basic-comments p {
+  padding: 10px 80px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(173, 173, 173, 0.5),
+    rgba(0, 0, 0, 0)
+  );
 }
 
 /*# sourceMappingURL=style.css.map */

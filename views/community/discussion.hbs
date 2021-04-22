@@ -10,20 +10,24 @@
     <p>{{discussion.createdBy.username}}</p>
 </div>
 
-{{#each comments}}
+
 <div class="basic-comments">
+    {{#each comments}}
     <p>{{this.text}}</p>
-    {{!-- <h1>Hello</h1> --}}
-</div>
-{{/each}}
-<div class="basic-form">
-    <form action="/community/{{community.slug}}/discussion/{{discussion._id}}" method="POST" class="select-form">
+    <hr>
+    {{/each}}
+    <br>
+    <div>
+        <form action="/community/{{community.slug}}/discussion/{{discussion._id}}" method="POST" class="select-form">
 
-        <input type="text" name="text" placeholder="Comment" class="basic-input">
+            <input type="text" name="text" placeholder="Comment" class="basic-input">
 
-        <button type="submit" class="basic-button">Comment</button>
-    </form>
+            <button type="submit" class="basic-button">Comment</button>
+        </form>
+    </div>
 </div>
+
+
 
 <div class="back-button">
     <a href="/community/{{community.slug}}">Back to {{community.name}} community</a>
