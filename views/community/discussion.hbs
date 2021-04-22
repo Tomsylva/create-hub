@@ -2,9 +2,12 @@
 
 <div class="basic-discussion">
     <p id="discussion-description">{{discussion.firstPost}}</p>
+    <img src="{{discussion.image}}" width="200px" height="200px">
+
     <a href="/community/{{discussion._id}}/edit-discussion">Edit topic</a>
     <a href="/community/{{discussion._id}}/delete">Delete Topic</a>
 </div>
+
 {{#each discussion.comments}}
 <div class="basic-comments">
     <p>{{this}}</p>

@@ -1,7 +1,8 @@
 <h1>Start a new Discussion in the {{singleCommunity.name}} Community</h1>
 
 <div class="basic-form">
-    <form action="/community/{{singleCommunity.slug}}/new-discussion" method="POST" class="select-form">
+    <form action="/community/{{singleCommunity.slug}}/new-discussion" method="POST" class="select-form"
+        enctype="multipart/form-data">
         <input type="text" name="title" id="title" placeholder="Topic" class="basic-input">
         <br>
         <input type="text" name="firstPost" id="firstPost" placeholder="About" class="basic-input">

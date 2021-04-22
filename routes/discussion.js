@@ -11,7 +11,7 @@ const User = require("../models/User.model");
 const Community = require("../models/Community.model");
 const Discussion = require("../models/Discussion.model");
 const Comment = require("../models/Comment.model");
-
+const moment = require("moment");
 // LINK FROM "START A CONVERSATION" BUTTON
 // Finds correct community and passes it with req-params and slug
 router.get(
@@ -46,7 +46,7 @@ router.post(
     const dynamicCommunity = req.params.dynamicCommunity;
     const { title, firstPost } = req.body;
     const image = req.file?.path;
-
+    const formattedTime = moment().format("MMMM Do YYYY, h:mm");
     if (!title || !firstPost) {
       return res.render("community/new-discussion", {
         errorMessage: "Please fill in both fields",
@@ -55,6 +55,7 @@ router.post(
     }
     Discussion.findOne({ title })
       .populate("User")
+      .populate("date")
       .then((found) => {
         if (found) {
           return res.render("community/new-discussion", {
@@ -67,6 +68,7 @@ router.post(
           firstPost,
           image,
           createdBy: req.session.user._id,
+          formattedTime,
         })
           .then((createdDiscussion) => {
             console.log("Amazing! Created discussion", createdDiscussion);
@@ -146,6 +148,7 @@ router.get(
       } else {
         res.render("community/edit-discussion", {
           discussion,
+          user: req.session.user,
         });
       }
     } catch (err) {
@@ -183,7 +186,7 @@ router.post(
     ).then((newDiscu) => {
       console.log("newDiscu", newDiscu);
       req.session.discussion = newDiscu;
-      res.redirect("/community");
+      res.redirect(`/community/${req.params.dynamicCommunity}`);
     });
   }
 );
