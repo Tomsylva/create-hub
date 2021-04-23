@@ -39,7 +39,6 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
 router.post(
   "/:dynamicCommunity/discussion/:dynamicDiscussion",
   isLoggedIn,
-  isMember,
   async (req, res) => {
     try {
       const { text } = req.body;

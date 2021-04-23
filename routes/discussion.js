@@ -70,13 +70,11 @@ router.post(
           createdBy: req.session.user._id,
         })
           .then((createdDiscussion) => {
-            console.log("Amazing! Created discussion", createdDiscussion);
             Community.findOneAndUpdate(
               { slug: dynamicCommunity },
               { $addToSet: { discussionTopics: createdDiscussion._id } },
               { new: true }
             ).then((updatedCommunity) => {
-              console.log("Updated comunnity", updatedCommunity);
               res.redirect(`/community/${req.params.dynamicCommunity}`);
             });
           })
@@ -124,7 +122,7 @@ router.get(
 router.get(
   "/:dynamicDiscussion/edit-discussion",
   isLoggedIn,
-  // isMember,
+
   isOwner,
   async (req, res) => {
     try {
@@ -151,16 +149,13 @@ router.get(
 router.post(
   "/:dynamicDiscussion/edit-discussion",
   isLoggedIn,
-  // isMember,
+
   isOwner,
   parser.single("image"),
   async (req, res) => {
-    console.log("LOOOK HERE MY FRIEND", req.params.dynamicDiscussion);
     await Discussion.findById(req.params.dynamicDiscussion);
     const { title, firstPost } = req.body;
     const image = req.file?.path;
-
-    console.log("HELLOOOOO");
 
     const toClean = { title, firstPost, image };
 
@@ -186,7 +181,7 @@ router.post(
 router.get(
   "/:dynamicDiscussion/delete",
   isLoggedIn,
-  // isMember,
+
   isOwner,
   async (req, res) => {
     try {

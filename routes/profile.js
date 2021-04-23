@@ -72,14 +72,17 @@ router.get("/delete", isLoggedIn, async (req, res) => {
   // update the session in the database removing the user from there
   req.session.user = null;
 
+  // Andre will research this again -> BULK DELETE ALL OF THE SESSIONS BY THE USER
+  const allUserComments = await Comment.find({ $or: [{ createdBy: userId }] });
+
+  const deleteAllPromises = allUserComments.map((el) =>
+    Comment.findByIdAndDelete(el._id)
+  );
+  await Promise.all(deleteAllPromises);
+
   // completely remove the cookie from the browser
   res.clearCookie("connect.sid");
   return res.redirect("/");
-  // Andre will research this again -> BULK DELETE ALL OF THE SESSIONS BY THE USER
-  // const allUserComments = await Comment.find({$or:[{createdBy: userId}]})
-
-  //   const deleteAllPromises = allUserComments.map(el => Comment.findByIdAndDelete(el._id))
-  // await Promise.all(deleteAllPromises)
 });
 
 module.exports = router;

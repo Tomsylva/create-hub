@@ -18,6 +18,7 @@ p {
 }
 a {
   color: #4e805d;
+  text-decoration: none;
 }
 
 h1 {
@@ -266,7 +267,6 @@ footer p {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  line-clamp: 3;
 }
 
 .basic-input {

@@ -2,12 +2,12 @@
 
 <div class="basic-discussion">
     <p id="discussion-description">{{discussion.firstPost}}</p>
-    {{#if image}}
-    <img src="{{discussion.image}}" width="200px" height="200px">
+    {{#if discussion.image}}
+    <img src="{{discussion.image}}" width="300px" height="300px">
     {{/if}}
 
     <h3>{{discussion.createdBy.username}}</h3>
-    {{#if createdBy}}
+    {{#if discussion.createdBy}}
     <button class="basic-button"><a href="/community/{{discussion._id}}/edit-discussion">Edit topic</a></button>
     <button class="basic-button"><a href="/community/{{discussion._id}}/delete">Delete Topic</a></button>
     {{/if}}
@@ -17,6 +17,7 @@
 <div class="basic-comments">
     {{#each comments}}
     <p>{{this.text}}</p>
+
     <hr>
     {{/each}}
     <br>

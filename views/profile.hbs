@@ -3,7 +3,8 @@
 <div id="profile-info">
     <h2 id="user-name">Welcome to your profile, <span>{{name}}</span></h2>
     <div id="edit-profile-links">
-        <a href="/profile/edit">Edit your profile</a><a href="/profile/delete">Delete Profile</a>
+        <button class="basic-button"><a href="/profile/edit">Edit your profile</a></button> <button
+            class="basic-button"><a href="/profile/delete">Delete Profile</a></button>
     </div>
     {{#if userImage}}
     <img src="{{userImage}}" id="user-image">
