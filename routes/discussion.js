@@ -68,6 +68,7 @@ router.post(
           firstPost,
           image,
           createdBy: req.session.user._id,
+          date: new Date(),
         })
           .then((createdDiscussion) => {
             Community.findOneAndUpdate(

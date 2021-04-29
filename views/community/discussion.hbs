@@ -6,7 +6,7 @@
     <img src="{{discussion.image}}" width="300px" height="300px">
     {{/if}}
 
-    <h3>{{discussion.createdBy.username}}</h3>
+    <a href="/profile">{{discussion.createdBy.username}}</a>
     {{#if discussion.createdBy}}
     <button class="basic-button"><a href="/community/{{discussion._id}}/edit-discussion">Edit topic</a></button>
     <button class="basic-button"><a href="/community/{{discussion._id}}/delete">Delete Topic</a></button>
@@ -17,14 +17,14 @@
 <div class="basic-comments">
     {{#each comments}}
     <p>{{this.text}}</p>
-
+    <a href="/profile">{{comments.createdBy.username}}</a>
     <hr>
     {{/each}}
     <br>
     <div>
         <form action="/community/{{community.slug}}/discussion/{{discussion._id}}" method="POST" class="select-form">
 
-            <input type="text" name="text" placeholder="Comment" class="basic-input">
+            <textarea name="text" placeholder="Comment" class="basic-input"></textarea>
 
             <button type="submit" class="basic-button">Comment</button>
         </form>

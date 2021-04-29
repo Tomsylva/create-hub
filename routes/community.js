@@ -24,7 +24,12 @@ router.get("/:dynamicCommunity/join", isLoggedIn, async (req, res) => {
     },
     { $addToSet: { members: req.session.user._id } }
   ).populate("members");
-
+  const isMember = singleCommunity.members.find(
+    (user) => user.username === req.session.user.username
+  );
+  if (isMember) {
+    return res.redirect("community/single-community");
+  }
   await User.findByIdAndUpdate(req.session.user._id, {
     $addToSet: { interests: singleCommunity._id },
   });
@@ -44,12 +49,11 @@ router.post(
       const { text } = req.body;
       const community = await Community.findOne({
         slug: req.params.dynamicCommunity,
-      })
-        .populate("discussionTopics")
-        .populate("createdBy");
+      }).populate("discussionTopics");
+      // .populate("createdBy");
       const discussion = await Discussion.findById(
         req.params.dynamicDiscussion
-      );
+      ).populate("createdBy");
 
       const createdComment = await Comment.create({
         text,
@@ -72,25 +76,6 @@ router.post(
 // LOADS EACH COMMUNITY HOME DYNAMICALLY
 // Each community can be viewed by anybody not signed in
 router.get("/:dynamicCommunity", async (req, res) => {
-  // const topic = await Community.findById(req.params.dynamicCommunity)
-  //   .populate("createdBy")
-  //   .populate("members");
-  // if (!topic) {
-  //   return res.redirect("/");
-  // }
-  // let isCreator = false;
-
-  // console.log("req.session", req.session);
-  // if (req.session.user) {
-  //   if (topic.createdBy.username === req.session.user.username) {
-  //     isCreator = true;
-  //   }
-  // }
-  // res.render("community/single-community", {
-  //   community: topic,
-  //   isCreator,
-  // });
-
   const singleCommunity = await Community.findOne({
     slug: req.params.dynamicCommunity,
   })

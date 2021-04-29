@@ -13,5 +13,9 @@
     {{#if bio}}
     <p id="user-bio">{{bio}}</p>
     {{/if}}
-    {{#if interests}}
-    <a href="{{interests}}" {{/if}} {{/with}} </div>
+
+    {{#each interests}}
+    <a href="/community/{{singleCommunity.slug}}">Communities{{this.name}}</a>
+    {{/each}}
+    {{/with}}
+</div>

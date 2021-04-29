@@ -81,6 +81,11 @@ nav li a:hover,
 
 .discussion-block {
   padding: 10px;
+  text-indent: 10px;
+  text-align: center;
+  letter-spacing: 1.5px;
+  white-space: pre-wrap;
+  margin: 0 auto;
 }
 
 .discussion-block:nth-child(odd) {
@@ -333,6 +338,9 @@ footer p {
   margin: 10px 50px;
   padding: 30px 100px;
   border-radius: 15px;
+  text-indent: 10px;
+  letter-spacing: 1.5px;
+  white-space: pre-wrap;
 }
 
 .basic-discussion a,
@@ -351,7 +359,12 @@ footer p {
 }
 
 .basic-comments p {
-  padding: 10px 80px;
+  padding: 10px;
+  text-indent: 10px;
+  text-align: center;
+  letter-spacing: 1.5px;
+  white-space: pre-wrap;
+  margin: 0 auto;
 }
 
 hr {
