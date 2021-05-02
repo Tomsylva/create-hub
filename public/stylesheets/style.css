@@ -82,7 +82,7 @@ nav li a:hover,
 .discussion-block {
   padding: 10px;
   text-indent: 10px;
-  text-align: center;
+  text-align: left;
   letter-spacing: 1.5px;
   white-space: pre-wrap;
   margin: 0 auto;

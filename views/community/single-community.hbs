@@ -21,6 +21,7 @@
             <h4><a href="/community/{{../singleCommunity.slug}}/discussion/{{this._id}}">{{this.title}}</a></h4>
             <p>{{this.firstPost}}</p>
             <img src="{{this.image}}" width="100px">
+            <h3>{{this.createdBy.username}}</h3>
             {{this.date}}
         </div>
         {{/each}}

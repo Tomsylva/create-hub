@@ -49,8 +49,9 @@ router.post(
       const { text } = req.body;
       const community = await Community.findOne({
         slug: req.params.dynamicCommunity,
-      }).populate("discussionTopics");
-      // .populate("createdBy");
+      })
+        .populate("discussionTopics")
+        .populate("createdBy");
       const discussion = await Discussion.findById(
         req.params.dynamicDiscussion
       ).populate("createdBy");
@@ -81,6 +82,7 @@ router.get("/:dynamicCommunity", async (req, res) => {
   })
     .populate("discussionTopics")
     .populate("members");
+
   // const isCommunityMember = await singleCommunity.members.includes(
   //   req.session.user._id
   // );
@@ -93,7 +95,7 @@ router.get("/:dynamicCommunity", async (req, res) => {
   let discussions = singleCommunity.discussionTopics.map((e) => {
     return {
       ...e.toJSON(), // in normal JS this does not exist. .toJSON exists in mongoose documentes.
-      date: moment(e.date).format("MMMM Do YYYY, h:mm:ss a"),
+      date: moment(e.date).format("LL"),
     };
   });
 
